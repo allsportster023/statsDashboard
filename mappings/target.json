@@ -1,0 +1,22 @@
+{
+  "mappings": {
+    "target": {
+      "properties" : {
+        "description" : {
+          "type" : "string"
+        },
+        "loc" : {
+          "type" : "geo_point"
+        },
+        "name" : {
+          "type" : "string",
+          "index": "not_analyzed"
+        },
+        "regionid" : {
+          "type" : "string",
+          "index": "not_analyzed"
+        }
+      }
+    }
+  }
+}
