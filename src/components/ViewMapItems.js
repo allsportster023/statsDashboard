@@ -1,6 +1,11 @@
 import React from 'react';
 import Map from './Map';
 import Sidebar from './Sidebar';
+import DynamicChart from './DynamicChart';
+
+const divBorder = {
+  border: '1px'
+}
 
 const  ViewMapItems = React.createClass({
   render: function() {
@@ -11,8 +16,8 @@ const  ViewMapItems = React.createClass({
           <div className="col-md-3 sidebar">
             <Sidebar />
           </div>
-          <div className="col-md-9 map">
-            <Map size={{width: '73vw', height: '75vh'}} />
+          <div className="col-md-5 map">
+            <Map size={{width: '100%', height: '50vh'}} />
             <div className="col-md-12 keyBar">
               <div className="row">
                 <div className="col-xs-1">
@@ -65,12 +70,15 @@ const  ViewMapItems = React.createClass({
                     <div className="keyLabel">SRC0</div>
                   </div>
                 </div>
-
-
               </div>
-
             </div>
           </div>
+        <div className="col-md-4 upperChart">
+          <DynamicChart />
+        </div>
+        <div className="col-md-4 lowerChart">
+
+        </div>
         </div>
       </div>
     )}

@@ -1,11 +1,11 @@
 {
-  "name": "murmation",
+  "name": "appDataViewer",
   "version": "1.0.0",
-  "description": "A project for sceduling resources",
+  "description": "A project for viewing app data",
   "main": "app.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/samkarp/murmuration"
+    "url": "https://github.com/allsportster023/statsDashboard"
   },
   "keywords": [
     "gulp",
@@ -40,6 +40,7 @@
   "homepage": "https://github.com/samkarp/murmuration#readme",
   "dependencies": {
     "axios": "^0.15.2",
+    "d3": "^4.7.3",
     "chosen-js": "^1.6.2",
     "history": "^3.0.0",
     "leaflet": "^1.0.1",
