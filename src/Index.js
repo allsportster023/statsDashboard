@@ -4,7 +4,7 @@ import { Router, Route, hashHistory } from 'react-router';
 import App from './components/App';
 import Map from './components/Map';
 import Table from './components/Table';
-import ViewMapItems from './components/ViewMapItems';
+import ViewMapItems from './components/AppMain';
 
 window.React = React;
 

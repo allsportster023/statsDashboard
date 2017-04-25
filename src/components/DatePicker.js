@@ -1,25 +1,60 @@
 import React from 'react';
+import {DateField, DatePicker, TransitionView} from 'react-date-picker';
 
 
+class DateTimePicker extends React.Component {
 
-class DatePicker extends React.Component {
-    static propTypes = {
-        onClick: PropTypes.func,
-        value: PropTypes.string
-    }
+  constructor(props) {
+    super(props);
+  }
 
+  render() {
 
-
-    render() {
-        const {value, onClick} = this.props;
-
-        return (
-            <div className="form-group">
-                <input type="text" className="form-control" value={value} onClick={onClick}/>
-                <IconCalendar className="date-picker-icon" onClick={onClick}></IconCalendar>
-            </div>
-        );
-    }
+    return (
+      <div>
+        <div>
+          <div className="col-md-3 blueText">Start Time</div>
+          <div className="calendar">
+            <DateField
+              dateFormat="YYYY-MM-DD HH:mm:ss"
+              forceValidDate={true}
+              defaultValue={this.props.startTime}
+            >
+              <TransitionView>
+                <DatePicker
+                  navigation={true}
+                  highlightWeekends={true}
+                  highlightToday={true}
+                  weekStartDay={0}
+                  weekNumbers={false}
+                />
+              </TransitionView>
+            </DateField>
+          </div>
+        </div>
+        <div>
+          <div className="col-md-3 blueText">End Time</div>
+          <div className="calendar">
+            <DateField
+              dateFormat="YYYY-MM-DD HH:mm:ss"
+              forceValidDate={true}
+              defaultValue={this.props.endTime}
+            >
+              <TransitionView>
+                <DatePicker
+                  navigation={true}
+                  highlightWeekends={true}
+                  highlightToday={true}
+                  weekStartDay={0}
+                  weekNumbers={false}
+                />
+              </TransitionView>
+            </DateField>
+          </div>
+        </div>
+      </div>
+    );
+  }
 }
 
-
+export default DateTimePicker

@@ -2,39 +2,19 @@ import React from 'react';
 
 class ChartTypeInput extends React.Component {
 
-    constructor(props) {
-        super(props);
-        this.handleClick = this.handleClick.bind(this);
-        this.state = {
-            objectives: []
-        }
-    }
+  constructor(props) {
+    super(props);
+  }
 
-    componentWillReceiveProps(nextProps) {
+  render() {
 
-        if(this.props != nextProps) {
-            this.setState({objectives: nextProps.objectives})
-        }
-    }
-
-    handleClick(selection) {
-        this.props.onClick(selection);
-    }
-
-    handleSearch(vals){
-        console.log("Handling AxisXInput Search");
-        console.log(vals);
-
-    }
-
-    render() {
-
-        return (
-            <select value={this.state.value} onChange={this.handleClick}>
-                <option value="bar">Bar Chart</option>
-                <option value="pie">Pie Chart</option>
-            </select>
-        )}
+    return (
+      <select value={this.props.chartType} onChange={this.props.handler}>
+        <option value="bar">Bar Chart</option>
+        <option value="pie">Pie Chart</option>
+      </select>
+    )
+  }
 }
 
 export default ChartTypeInput
