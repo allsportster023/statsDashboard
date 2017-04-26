@@ -6,6 +6,10 @@ class DateTimePicker extends React.Component {
 
   constructor(props) {
     super(props);
+
+    this.startTimeVal = 0;
+    this.endTimeVal = 0;
+
   }
 
   render() {
@@ -19,6 +23,10 @@ class DateTimePicker extends React.Component {
               dateFormat="YYYY-MM-DD HH:mm:ss"
               forceValidDate={true}
               defaultValue={this.props.startTime}
+              onChange={(dateString, {dateMoment, timestamp}) => {
+                console.log(this.startTimeVal);
+                this.props.handler(this.startTimeVal, null);
+              }}
             >
               <TransitionView>
                 <DatePicker
@@ -27,6 +35,9 @@ class DateTimePicker extends React.Component {
                   highlightToday={true}
                   weekStartDay={0}
                   weekNumbers={false}
+                  onChange={(dateString, {dateMoment, timestamp}) => {
+                    this.startTimeVal = timestamp;
+                  }}
                 />
               </TransitionView>
             </DateField>
@@ -39,6 +50,9 @@ class DateTimePicker extends React.Component {
               dateFormat="YYYY-MM-DD HH:mm:ss"
               forceValidDate={true}
               defaultValue={this.props.endTime}
+              onChange={(dateString, {dateMoment, timestamp}) => {
+                this.props.handler(null, this.endTimeVal);
+              }}
             >
               <TransitionView>
                 <DatePicker
@@ -47,6 +61,9 @@ class DateTimePicker extends React.Component {
                   highlightToday={true}
                   weekStartDay={0}
                   weekNumbers={false}
+                  onChange={(dateString, {dateMoment, timestamp}) => {
+                    this.endTimeVal = timestamp;
+                  }}
                 />
               </TransitionView>
             </DateField>

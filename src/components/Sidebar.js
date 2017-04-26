@@ -17,10 +17,10 @@ class Sidebar extends React.Component {
 
     this.state = {
       sourceArray: [],
-      startEndTimes: [new Date(), new Date()-(86400000*7)],
+      startEndTimes: [Date.now()-(86400000*7), Date.now()],
       categoryArray: [],
       codeArray: []
-    }
+    };
   }
 
   handleSourceChange(e) {
@@ -41,7 +41,6 @@ class Sidebar extends React.Component {
       categoryArray: e
     });
 
-
   }
 
   handleCodeChange(e) {
@@ -54,14 +53,38 @@ class Sidebar extends React.Component {
 
   }
 
-  handleTimeframeChange(e) {
+  handleTimeframeChange(start, end) {
 
     console.log("Handling TIME change");
-    console.log(e);
-    this.setState({
-      startEndTime: e
-    });
 
+    const timeArr = this.state.startEndTimes;
+
+    //If the start time is to be chagned
+    if(start) {
+      timeArr[0] = start;
+    }
+
+    //If the end time is to be changed
+    if(end){
+      timeArr[1] = end;
+    }
+
+    console.log(timeArr);
+
+    //Make sure that the end time is after the start time
+    if(timeArr[0] < timeArr[1]) {
+
+      this.setState({
+        startEndTimes: timeArr
+      });
+
+    } else {
+      //Alert the user that they have to select an
+      //end that is later than the start time
+      console.log("End is before start");
+      alert("End Time must be after Before Time");
+
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -74,11 +97,26 @@ class Sidebar extends React.Component {
     }
   }
 
+  componentWillUpdate(nextProps, nextState){
+
+    if(this.state != nextState){
+      console.log("New State Detected");
+
+      //TODO determine URL for SOLR call
+    }
+
+  }
+
+  componentDidMount() {
+    console.log("ComponentDidMount")
+  }
   componentWillMount() {
+    console.log("ComponentWillMount")
   }
 
   componentWillUnmount() {
-  }
+    console.log("ComponentWillUnmount")
+  }5
 
   render() {
 
@@ -91,7 +129,7 @@ class Sidebar extends React.Component {
             <div className="panel-heading-blue" id="heading1">
               <h4 className="panel-title">
                 <a className="glyphicon glyphicon-asterisk pad14" href="#collapseOne"></a>
-                <a className="accordion-toggle" data-toggle="collapse" href="#collapseOne">Sources</a>
+                <a className="accordion-toggle collapsed" data-toggle="collapse" href="#collapseOne">Sources</a>
               </h4>
             </div>
             <div id="collapseOne" className="panel-collapse collapse">
@@ -121,7 +159,7 @@ class Sidebar extends React.Component {
             <div className="panel-heading-blue">
               <h4 className="panel-title">
                 <a className="glyphicon glyphicon-th-large pad14" href="#collapseThree"></a>
-                <a className="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">Categories</a>
+                <a className="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">Categories</a>
               </h4>
             </div>
             <div id="collapseThree" className="panel-collapse collapse">
@@ -134,7 +172,7 @@ class Sidebar extends React.Component {
             <div className="panel-heading-blue">
               <h4 className="panel-title">
                 <a className="glyphicon glyphicon-barcode pad14" href="#collapseFour"></a>
-                <a className="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseFour">Codes</a>
+                <a className="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseFour">Codes</a>
               </h4>
             </div>
             <div id="collapseFour" className="panel-collapse collapse">

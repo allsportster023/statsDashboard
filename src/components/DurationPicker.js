@@ -7,39 +7,30 @@ class DurationPicker extends React.Component {
   constructor(props) {
     super(props);
 
+    this.handleEvent = this.handleEvent.bind(this);
+    this.handler = this.props.handler;
+
     this.state = {
       ranges: {
-        'Today': [moment(), moment()],
-        'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-        'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-        'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-        'This Month': [moment().startOf('month'), moment().endOf('month')],
-        'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        'Today': [moment().utc(true), moment().utc(true)],
+        'Yesterday': [moment().utc(true).subtract(1, 'days'), moment().utc(true).subtract(1, 'days')],
+        'Last 7 Days': [moment().utc(true).subtract(6, 'days'), moment().utc(true)],
+        'Last 30 Days': [moment().utc(true).subtract(29, 'days'), moment().utc(true)],
+        'This Month': [moment().utc(true).startOf('month'), moment().utc(true).endOf('month')],
+        'Last Month': [moment().utc(true).subtract(1, 'month').startOf('month'), moment().utc(true).subtract(1, 'month').endOf('month')],
+        'This Year': [moment().utc(true).startOf('year'), moment().utc(true).endOf('year')],
+        'Last Year': [moment().utc(true).subtract(1, 'year').startOf('year'), moment().utc(true).subtract(1, 'year').endOf('year')]
       },
-      startDate: moment().subtract(29, 'days'),
-      endDate: moment(),
+      startDate: moment().utc(true).subtract(29, 'days'),
+      endDate: moment().utc(true),
       currentRange: 'Last 30 Days'
     }
   }
 
-    // getInitialState: function () {
-	// 	return {
-	// 		ranges: {
-	// 			'Today': [moment(), moment()],
-	// 			'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-	// 			'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-	// 			'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-	// 			'This Month': [moment().startOf('month'), moment().endOf('month')],
-	// 			'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-	// 		},
-	// 		startDate: moment().subtract(29, 'days'),
-	// 		endDate: moment(),
-	// 		currentRange: 'Last 30 Days'
-	// 	};
-	// }
-
 	handleEvent(event, picker) {
-	  // console.log(picker);
+
+    this.props.handler(picker.startDate, picker.endDate);
+
 		this.setState({
 			startDate: picker.startDate,
 			endDate: picker.endDate,
@@ -48,12 +39,11 @@ class DurationPicker extends React.Component {
 	}
 
 	render() {
-		const start = this.state.startDate.format('YYYY-MM-DD');
-		const end = this.state.endDate.format('YYYY-MM-DD');
+
 		const label = this.state.currentRange;
 
 		return (
-      <DateRangePicker startDate={this.state.startDate} endDate={this.state.endDate} ranges={this.state.ranges} onEvent={this.handleEvent}>
+      <DateRangePicker startDate={this.state.startDate} endDate={this.state.endDate} ranges={this.state.ranges} onApply={this.handleEvent}>
         <button className="btn selected-date-range-btn duration-btn" style={{width:'100%', align: 'center'}}>
           <div className="pull-left">
             <div className="glyphicon glyphicon-calendar"></div>
