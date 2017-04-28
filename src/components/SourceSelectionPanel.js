@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import CheckboxItem from './CheckboxItem';
 
 class SourceSelectionPanel extends React.Component {
@@ -14,40 +15,55 @@ class SourceSelectionPanel extends React.Component {
 
     this.isBoxChecked = this.isBoxChecked.bind(this);
 
-    this.initialSourceArray = [];
+    this.state = {initialSourceArray: []};
+
     this.selectedSourceArray = [];
+  }
+
+  componentDidUpdate(nextProps, nextState) {
+
+    if (this.state != nextState) {
+
+      this.selectedSourceArray = this.state.initialSourceArray.slice();
+      //Send new data to parent on initialization
+      this.props.handler(this.selectedSourceArray);
+
+    }
   }
 
   componentWillMount() {
 
-    //TODO Query SOLR to get unique sources
-    this.initialSourceArray = ["Books", "Online", "Magazines", "Journals", "Scholars", "Reports"];
+    const _this = this;
+    axios.get("http://localhost:8983/solr/stats_test_data/select?facet.field=Source&facet.query=*&facet=on&indent=on&q=*:*&rows=0&wt=json")
+      .then(function (d) {
+        const theArray = d.data.facet_counts.facet_fields.Source;
+        for (var i = 1; i <= theArray.length; i += 1)
+          theArray.splice(i, 1);
 
-    this.selectedSourceArray = this.initialSourceArray.slice();
-    //Send new data to parent on initialization
-    this.props.handler(this.selectedSourceArray);
-
-
+        _this.setState({
+          initialSourceArray: theArray
+        });
+      });
   }
 
-  isBoxChecked(box){
-    if(box == true || box == false) {
+  isBoxChecked(box) {
+    if (box == true || box == false) {
       return box;
     } else {
       return this.selectedSourceArray.includes(box);
     }
   }
 
-  handleSelectAll(evt){
+  handleSelectAll(evt) {
 
-   evt.preventDefault();
-   this.selectedSourceArray = this.initialSourceArray.slice();
+    evt.preventDefault();
+    this.selectedSourceArray = this.state.initialSourceArray.slice();
 
 
     this.props.handler(this.selectedSourceArray);
   }
 
-  handleSelectNone(evt){
+  handleSelectNone(evt) {
 
     evt.preventDefault();
     this.selectedSourceArray = [];
@@ -82,7 +98,7 @@ class SourceSelectionPanel extends React.Component {
         <form role="form">
           <div className="form-group">
 
-            {this.initialSourceArray.map(function (source) {
+            {this.state.initialSourceArray.map(function (source) {
 
               return (
                 <CheckboxItem handler={handler} value={source} key={source} checked={isBoxChecked(source)}/>

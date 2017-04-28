@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import CheckboxItem from './CheckboxItem';
 
 class CategorySelectionPanel extends React.Component {
@@ -13,38 +14,54 @@ class CategorySelectionPanel extends React.Component {
 
     this.isBoxChecked = this.isBoxChecked.bind(this);
 
-    this.initialCategoryArray = [];
     this.selectedCategoryArray = [];
+
+    this.state = {initialCategoryArray: []}
+  }
+
+  componentDidUpdate(nextProps, nextState) {
+
+    if (this.state != nextState) {
+
+      this.selectedCategoryArray = this.state.initialCategoryArray.slice();
+      //Send new data to parent for initialization
+      this.props.handler(this.selectedCategoryArray);
+
+    }
   }
 
   componentWillMount() {
 
-    //TODO Query SOLR to get unique categories
-    this.initialCategoryArray = ["Jet", "Propeller", "TurboJet", "Electric", "Piston", "Multi", "Complex"];
+    const _this = this;
+    axios.get("http://localhost:8983/solr/stats_test_data/select?facet.field=Category&facet.query=*&facet=on&indent=on&q=*:*&rows=0&wt=json")
+      .then(function (d) {
+        const theArray = d.data.facet_counts.facet_fields.Category;
+        for (var i = 1; i <= theArray.length; i += 1)
+          theArray.splice(i, 1);
 
-    this.selectedCategoryArray = this.initialCategoryArray.slice();
-    //Send new data to parent for initialization
-    this.props.handler(this.selectedCategoryArray);
-
+        _this.setState({
+          initialCategoryArray: theArray
+        });
+      });
   }
 
-  isBoxChecked(box){
-    if(box == true || box == false) {
+  isBoxChecked(box) {
+    if (box == true || box == false) {
       return box;
     } else {
       return this.selectedCategoryArray.includes(box);
     }
   }
 
-  handleSelectAll(evt){
+  handleSelectAll(evt) {
 
     evt.preventDefault();
-    this.selectedCategoryArray = this.initialCategoryArray.slice();
+    this.selectedCategoryArray = this.state.initialCategoryArray.slice();
 
     this.props.handler(this.selectedCategoryArray);
   }
 
-  handleSelectNone(evt){
+  handleSelectNone(evt) {
 
     evt.preventDefault();
     this.selectedCategoryArray = [];
@@ -55,10 +72,10 @@ class CategorySelectionPanel extends React.Component {
 
   handleCategoryCheck(e) {
 
-    if(e.target.checked){
+    if (e.target.checked) {
       this.selectedCategoryArray.push(e.target.id)
     } else {
-      this.selectedCategoryArray.splice(this.selectedCategoryArray.indexOf(e.target.id),1);
+      this.selectedCategoryArray.splice(this.selectedCategoryArray.indexOf(e.target.id), 1);
     }
 
     //Send new data to parent
@@ -80,7 +97,7 @@ class CategorySelectionPanel extends React.Component {
         <form role="form">
           <div className="form-group">
 
-            {this.initialCategoryArray.map(function (category) {
+            {this.state.initialCategoryArray.map(function (category) {
               return (
                 <CheckboxItem handler={handler} value={category} key={category} checked={isBoxChecked(category)}/>
               )
