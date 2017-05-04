@@ -9,10 +9,10 @@ class AxisYInput extends React.Component {
   render() {
     return (
       <select value={this.props.yValue} onChange={this.props.handler}>
-        <option value="source">Source</option>
-        <option value="code">Code</option>
-        <option value="category">Category</option>
-        <option value="category">Date</option>
+        <option value="Source">Source</option>
+        <option value="Code">Code</option>
+        <option value="Category">Category</option>
+        <option value="Date">Date</option>
       </select>
     )
   }

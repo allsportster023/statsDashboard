@@ -1,167 +1,234 @@
 import React from 'react';
-// var d3 = require('d3');
+import axios from 'axios';
+import StackedChart from './StackedChart';
+
 import AxisYInput from './AxisYInput';
 import AxisXInput from './AxisXInput';
 import ChartTypeInput from './ChartTypeInput';
-import DynamicBarChart from './DynamicBarChart';
 import DynamicPieChart from './DynamicPieChart';
-// import d3 from 'd3';
 
-const dataFile = require('../data/dateSource.json');
-const dataFileSource = require('../data/source.json');
-// const dataFileAge = require('../data/age.json');
+const flatten = function (input) {
+  var flattened = [];
 
-const pieChartSeries = [];
-
-
-// const xScale = 'ordinal';
-const yTickFormat = d3.format(".2s");
-
-const value = function (d) {
-  return d.count;
+  for (var i = 0; i < input.length; ++i) {
+    for (var j = 0; j < input[i].length; ++j)
+      flattened.push(input[i][j]);
+  }
+  return flattened;
 };
 
-
-//FOR TIME
-// const xScale = 'time';
-// Date parsing
-// const x = function (d) {
-//   var parseDate = d3.time.format("%Y-%m-%d").parse;
-//   return parseDate(d.Date);
-// };
-// Y Parsing
-// const y = function(d) {
-//   return +d;
-// };
-
-let xValFunction = function (d) {
-  return d.date;
+const unique = function(arr)
+{
+  var n = {},r=[];
+  for(var i = 0; i < arr.length; i++)
+  {
+    if (!n[arr[i]])
+    {
+      n[arr[i]] = true;
+      r.push(arr[i]);
+    }
+  }
+  return r;
 };
-
 
 class DynamicChart extends React.Component {
 
   constructor(props) {
     super(props);
-    this.handleClick = this.handleClick.bind(this);
+
     this.handleXaxisChange = this.handleXaxisChange.bind(this);
     this.handleYaxisChange = this.handleYaxisChange.bind(this);
     this.handleChartTypeChange = this.handleChartTypeChange.bind(this);
 
+    this.convertArrayToSolrSyntax = this.convertArrayToSolrSyntax.bind(this);
+    this.createSolrQueryString = this.createSolrQueryString.bind(this);
+    this.createPivotCall = this.createPivotCall.bind(this);
+    this.createSolrQueryString = this.createSolrQueryString.bind(this);
+
+    this.convertSolrDataToSeries = this.convertSolrDataToSeries.bind(this);
+    this.convertSolrDataToD3Data = this.convertSolrDataToD3Data.bind(this);
+
     this.state = {
       data: [],
       chartSeries: [],
-      xAxisValue: 'date',
-      xScale: 'ordinal',
-      xValue: xValFunction,
-      yAxisValue: 'source',
-      chartType: 'bar'
+      xAxisValue: 'Date',
+      yAxisValue: 'Source',
+      chartType: 'bar',
+
+      xScale: 'ordinal'
 
     }
   }
 
-  componentDidMount() {
-    // this.loadExternalData();
-    dataFile.forEach(function (d) {
-      pieChartSeries.push({"field": d.State})
+  convertArrayToSolrSyntax(arr) {
+
+    let solrStr = "(";
+    arr.forEach(function (d, i) {
+      solrStr += d;
+
+      if (i < arr.length - 1) {
+        solrStr += " OR "
+      }
     });
 
-    var re = new RegExp(this.state.xAxisValue, 'i');
+    solrStr += ")";
 
-    let tmpChartSeries = []
-    for (var key in dataFile[0]) {
-      if (!key.match(re)) {
-        tmpChartSeries.push({"field": key})
+    return solrStr;
+
+  }
+
+  createSolrQueryString(){
+    let solrQueryStr = "http://localhost:8983/solr/stats_test_data/select?wt=json&indent=true&rows=0&q=";
+
+    solrQueryStr += "Source:";
+    solrQueryStr += this.convertArrayToSolrSyntax(this.props.sources);
+    solrQueryStr += " AND Category:";
+    solrQueryStr += this.convertArrayToSolrSyntax(this.props.categories);
+    solrQueryStr += " AND Code:";
+    solrQueryStr += this.convertArrayToSolrSyntax(this.props.codes);
+    solrQueryStr += " AND Date:["+new Date(this.props.timeframe[0]).toISOString()+" TO "+new Date(this.props.timeframe[1]).toISOString()+"]";
+
+    return solrQueryStr;
+
+  }
+
+  createPivotCall(urlStr){
+    //&facet.pivot.mincount=1
+    urlStr += "&facet=true&facet.sort=index&facet.pivot=";
+    urlStr += this.state.xAxisValue + "," + this.state.yAxisValue;
+
+    return urlStr;
+  }
+
+  getDataFromSolr() {
+    const _this = this;
+    const startUrl = this.createSolrQueryString();
+    const pivotUrl = this.createPivotCall(startUrl);
+    console.log(pivotUrl);
+    axios.get(pivotUrl)
+      .then(function (d) {
+
+        const newData = d.data.facet_counts.facet_pivot[Object.keys(d.data.facet_counts.facet_pivot)[0]];
+
+        _this.setState({
+          data: _this.convertSolrDataToD3Data(newData),
+          chartSeries: _this.convertSolrDataToSeries(newData)
+        })
+
+      });
+
+  }
+
+  componentDidUpdate(nextProps, nextState) {
+
+    if(this.props != nextProps) {
+      if (this.props.sources.length != 0 &&
+        this.props.timeframe.length != 0 &&
+        this.props.categories.length != 0 &&
+        this.props.codes.length != 0) {
+
+        console.log("DynamicChart: componentDidUpdate Props");
+
+        this.getDataFromSolr();
+
+      } else {
+
       }
     }
 
-    this.setState({
-      data: dataFile,
-      chartSeries: tmpChartSeries,
-      xAxisValue: this.state.xAxisValue,
-      xValue: xValFunction
-    });
-  }
+    if(this.state != nextState){
+      console.log("DynamicChart: componentDidUpdate State");
 
-  loadExternalData() {
-    $.ajax({
-      url: "http://",
-      dataType: 'json',
-      success: (data) => {
-        console.log(data);
-        this.setState({data: data});
-      },
-      error: (xhr, status, err) => {
-        console.error(this.props.url, status, err.toString());
+      if(this.state.xAxisValue != nextState.xAxisValue ||
+         this.state.yAxisValue != nextState.yAxisValue) {
+        console.log("DynamicChart: componentDidUpdate State: axisValue");
+        console.log(this.state);
+        console.log(nextState);
+
+        this.getDataFromSolr();
       }
-    });
-  }
 
-  componentWillReceiveProps(nextProps) {
-
-    if (this.props != nextProps) {
-      this.setState({data: nextProps.data})
     }
   }
 
-  handleDropdownChange(event, data) {
+  convertSolrDataToSeries(data){
+
+    const tmpChartSeries = data.map(function (d) {
+      return d.pivot.map(function (e) {
+        return e.value
+      });
+    });
+
+    return unique(flatten(tmpChartSeries)).map(function (d) {
+      return {"field": d}
+    });
 
   }
 
-  handleClick(selection) {
-    this.props.onClick(selection);
+  convertSolrDataToD3Data(data){
+
+    let barChartDataArray = [];
+    const _this = this;
+
+    // const xValues = data.map(function (d) {
+    data.forEach(function (d) {
+
+      let barChartDataObj= {};
+
+      //Set the value field to be the XAxis field
+
+      if(isNaN(new Date(d.value).valueOf())){
+        barChartDataObj[_this.state.xAxisValue] = d.value;
+      } else {
+        let m = new Date(d.value);
+        barChartDataObj[_this.state.xAxisValue] = m.getUTCFullYear() + "-" +
+          ("0" + (m.getUTCMonth()+1)).slice(-2) + "-" +
+          ("0" + m.getUTCDate()).slice(-2);
+
+      }
+
+
+      //For each pivot parameter
+      d.pivot.forEach(function (e) {
+        barChartDataObj[e.value] = e.count;
+      });
+
+      barChartDataArray.push(barChartDataObj);
+
+    });
+
+    console.log("BarChartData:");
+    console.log(barChartDataArray);
+
+    return barChartDataArray;
+
   }
 
   handleXaxisChange(e) {
     console.log("Changing X Axis value to: " + e.target.value);
-    e.preventDefault();
-
-    const re = new RegExp(e.target.value, 'i');
-
-    let useData = dataFileSource;
-
-    if (e.target.value == 'date')
-      useData = dataFile;
-    else if (e.target.value == 'source')
-      useData = dataFileSource;
-
-
-    let tmpChartSeries = [];
-    for (const key in useData[0]) {
-      if (!key.match(re)) {
-        tmpChartSeries.push({"field": key})
-      } else {
-        console.log(key);
-        xValFunction = function (d) {
-          return d[key];
-        };
-      }
-    }
 
     this.setState({
-      data: useData,
-      chartSeries: tmpChartSeries,
-      xAxisValue: e.target.value,
-      xValue: xValFunction
-    })
+      xAxisValue: e.target.value
+    });
 
   }
 
   handleYaxisChange(e) {
     console.log("Changing Y Axis value to: " + e.target.value);
-    e.preventDefault();
+
     this.setState({
       yAxisValue: e.target.value
-    })
+    });
+
   }
 
   handleChartTypeChange(e) {
     console.log("Changing chart type to: " + e.target.value);
-    e.preventDefault();
-
-    this.setState({
-      chartType: e.target.value
-    })
+    // e.preventDefault();
+    //
+    // this.setState({
+    //   chartType: e.target.value
+    // })
   }
 
 
@@ -169,21 +236,19 @@ class DynamicChart extends React.Component {
 
     let chart = null;
 
-    if (this.state.chartType == 'bar') {
+    if (this.state.chartType == 'bar' && this.state.data.length != 0) {
 
-      // var xDomain = d3.extent(this.state.data, function(d){ return x(d) });
-      // var xRange = [0, 550];
+      chart = <StackedChart width={475} height={280} data={this.state.data} xField={this.state.xAxisValue} />;
 
-      chart =
-        <DynamicBarChart width={550} height={300} data={this.state.data} series={this.state.chartSeries} xScale={this.state.xScale}
-                         yTickFormat={yTickFormat} xValue={this.state.xValue}/>;
-    } else {
+    } else if(this.state.chartType == 'pie' && this.state.data.length != 0) {
       console.log(this.state.xValue);
       console.log(this.state.chartSeries);
-      console.log(value);
-      chart = <DynamicPieChart width={550} height={300} data={this.state.data} series={this.state.chartSeries} name={this.state.xValue}
+      // console.log(value);
+      chart = <DynamicPieChart width={490} height={280} data={this.state.data} series={this.state.chartSeries}
+                               name={this.state.xValue}
                                value={value}/>;
     }
+
 
     return (
       <div className="container-fluid"
@@ -194,13 +259,14 @@ class DynamicChart extends React.Component {
             <AxisYInput handler={this.handleYaxisChange} xValue={this.state.yAxisValue}/>
           </div>
           <div className="col-md-6">
-            TITLE AREA
+            {this.state.xAxisValue+" by "+this.state.yAxisValue}
           </div>
           <div className="col-md-3">
             Chart Type
             <ChartTypeInput handler={this.handleChartTypeChange} chartType={this.state.chartType}/>
           </div>
         </div>
+
         <div className="row">
           {chart}
         </div>
@@ -210,7 +276,7 @@ class DynamicChart extends React.Component {
             <AxisXInput handler={this.handleXaxisChange} xValue={this.state.xAxisValue}/>
           </div>
           <div className="col-md-6">
-            {this.state.xAxisValue.charAt(0).toUpperCase() + this.state.xAxisValue.slice(1)}
+            {/*{this.state.xAxisValue.charAt(0).toUpperCase() + this.state.xAxisValue.slice(1)}*/}
           </div>
         </div>
       </div>

@@ -17,10 +17,12 @@ class AppMain extends React.Component {
 
     this.state = {
       sources: [],
-      timeframe: [Date.now() - (86400000 * 7), Date.now()],
+      timeframe: [new Date('2017-01-13') - (86400000 * 14), new Date('2017-01-13')],
       categories: [],
       codes: []
     }
+    // timeframe: [Date.now() - (86400000 * 7), Date.now()],
+
   }
 
   componentDidUpdate(nextProps, nextState) {
@@ -118,10 +120,12 @@ class AppMain extends React.Component {
             <MapLegend />
           </div>
           <div className="col-md-4 upperChart">
-            {/*<DynamicChart />*/}
+            <DynamicChart sources={this.state.sources} timeframe={this.state.timeframe}
+                          categories={this.state.categories} codes={this.state.codes}/>
           </div>
           <div className="col-md-4 lowerChart">
-            {/*<DynamicChart />*/}
+            <DynamicChart sources={this.state.sources} timeframe={this.state.timeframe}
+                          categories={this.state.categories} codes={this.state.codes}/>
           </div>
         </div>
       </div>

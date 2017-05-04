@@ -9,10 +9,10 @@ class AxisXInput extends React.Component {
   render() {
     return (
       <select value={this.props.xValue} onChange={this.props.handler}>
-        <option value="date">Date</option>
-        <option value="source">Source</option>
-        <option value="code">Code</option>
-        <option value="category">Category</option>
+        <option value="Date">Date</option>
+        <option value="Source">Source</option>
+        <option value="Code">Code</option>
+        <option value="Category">Category</option>
       </select>
     )
   }
