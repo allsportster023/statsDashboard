@@ -53,7 +53,7 @@ class StackedChart extends React.Component {
         {/*<Legend />*/}
          {unique(fields).map((field, idx) =>
 
-            <Bar key={field.toString()} dataKey={field} stackId="a" className={field} />
+            <Bar key={field.toString()} dataKey={field} stackId="a" fill={this.props.colorMap[field] ? this.props.colorMap[field] : 'black'}/>
 
          )}
         {/*<Brush dataKey={this.props.xField} height={30} stroke="#8884d8"/>*/}

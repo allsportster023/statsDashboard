@@ -4,6 +4,11 @@ import MapLegend from './MapLegend';
 import Sidebar from './Sidebar';
 import DynamicChart from './DynamicChart';
 
+var colorMap = {};
+
+
+let alreadyCreatedColors= false;
+
 class AppMain extends React.Component {
 
   constructor(props) {
@@ -21,8 +26,6 @@ class AppMain extends React.Component {
       categories: [],
       codes: []
     }
-    // timeframe: [Date.now() - (86400000 * 7), Date.now()],
-
   }
 
   componentDidUpdate(nextProps, nextState) {
@@ -37,6 +40,58 @@ class AppMain extends React.Component {
       console.log(this.state.timeframe);
       console.log(this.state.categories);
       console.log(this.state.codes);
+
+      let goldenRatio = 0.618033988749895;
+
+      if(!alreadyCreatedColors) {
+
+
+        this.state.sources.forEach(function (d,i) {
+          var startVal = 10.1;
+          startVal += goldenRatio*i;
+          startVal %= 1;
+          colorMap[d] = "hsl("+(360*startVal)+", 90%, 50%)";
+        });
+
+        this.state.categories.forEach(function (d,i) {
+          let startVal = 100.1;
+          startVal += goldenRatio*i;
+          startVal %= 1;
+          colorMap[d] = "hsl("+(360*startVal)+", 60%, 55%)";
+        });
+
+        this.state.codes.forEach(function (d,i) {
+          let startVal = 1000.1;
+          startVal += goldenRatio*i;
+          startVal %= 1;
+          colorMap[d] = "hsl("+(360*startVal)+", 40%, 60%)";
+
+        });
+
+        alreadyCreatedColors = true;
+
+      }
+
+      var firstDate = new Date(this.state.timeframe[0]);
+      var secondDate = new Date(this.state.timeframe[1]);
+
+      var diffDays = Math.round(Math.abs((firstDate.getTime() - secondDate.getTime())/(86400000)));
+
+      //For each day, figure out the correct color
+      for(var i = 0; i <= diffDays; i++){
+        let thisDate = new Date(firstDate.valueOf());
+        thisDate.setDate(firstDate.getDate() + i);
+
+        let milliDate = Date.parse(thisDate.getUTCFullYear() + "-" +
+          ("0" + (thisDate.getUTCMonth()+1)).slice(-2) + "-" +
+          ("0" + thisDate.getUTCDate()).slice(-2));
+
+        let startVal = 500.1;
+        startVal += goldenRatio*parseInt(milliDate.toString().slice(0,6));
+        startVal %= 1;
+        colorMap[new Date(milliDate).toISOString().slice(0,19)+"Z"] = "hsl(187, "+(100*startVal)+"%, "+(100*startVal)+"%)";
+
+      }
 
 
     } else {
@@ -73,7 +128,7 @@ class AppMain extends React.Component {
 
     console.log("AppMain: Handling TIME change");
 
-    const timeArr = this.state.startEndTimes;
+    const timeArr = this.state.timeframe;
 
     //If the start time is to be chagned
     if (start) {
@@ -91,7 +146,7 @@ class AppMain extends React.Component {
     if (timeArr[0] < timeArr[1]) {
 
       this.setState({
-        startEndTimes: timeArr
+        timeframe: timeArr
       });
 
     } else {
@@ -121,11 +176,11 @@ class AppMain extends React.Component {
           </div>
           <div className="col-md-4 upperChart">
             <DynamicChart sources={this.state.sources} timeframe={this.state.timeframe}
-                          categories={this.state.categories} codes={this.state.codes}/>
+                          categories={this.state.categories} codes={this.state.codes} colorMap={colorMap}/>
           </div>
           <div className="col-md-4 lowerChart">
             <DynamicChart sources={this.state.sources} timeframe={this.state.timeframe}
-                          categories={this.state.categories} codes={this.state.codes}/>
+                          categories={this.state.categories} codes={this.state.codes} colorMap={colorMap}/>
           </div>
         </div>
       </div>

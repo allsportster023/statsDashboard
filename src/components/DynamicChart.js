@@ -5,7 +5,7 @@ import StackedChart from './StackedChart';
 import AxisYInput from './AxisYInput';
 import AxisXInput from './AxisXInput';
 import ChartTypeInput from './ChartTypeInput';
-import DynamicPieChart from './DynamicPieChart';
+import MultiLevelPieChart from './MultiLevelPieChart';
 
 const flatten = function (input) {
   var flattened = [];
@@ -46,11 +46,11 @@ class DynamicChart extends React.Component {
     this.createSolrQueryString = this.createSolrQueryString.bind(this);
 
     this.convertSolrDataToSeries = this.convertSolrDataToSeries.bind(this);
-    this.convertSolrDataToD3Data = this.convertSolrDataToD3Data.bind(this);
+    this.convertSolrDataToBarData = this.convertSolrDataToBarData.bind(this);
+    this.convertSolrDataToPieData = this.convertSolrDataToPieData.bind(this);
 
     this.state = {
       data: [],
-      chartSeries: [],
       xAxisValue: 'Date',
       yAxisValue: 'Source',
       chartType: 'bar',
@@ -110,10 +110,18 @@ class DynamicChart extends React.Component {
 
         const newData = d.data.facet_counts.facet_pivot[Object.keys(d.data.facet_counts.facet_pivot)[0]];
 
-        _this.setState({
-          data: _this.convertSolrDataToD3Data(newData),
-          chartSeries: _this.convertSolrDataToSeries(newData)
-        })
+        if(_this.state.chartType == 'bar') {
+          _this.setState({
+            data: _this.convertSolrDataToBarData(newData),
+          })
+
+        } else if (_this.state.chartType == 'pie') {
+          _this.setState({
+            data: _this.convertSolrDataToPieData(newData),
+          })
+
+        }
+
 
       });
 
@@ -142,8 +150,10 @@ class DynamicChart extends React.Component {
       if(this.state.xAxisValue != nextState.xAxisValue ||
          this.state.yAxisValue != nextState.yAxisValue) {
         console.log("DynamicChart: componentDidUpdate State: axisValue");
-        console.log(this.state);
-        console.log(nextState);
+
+        this.getDataFromSolr();
+      } else if (this.state.chartType != nextState.chartType) {
+        console.log("DynamicChart: componentDidUpdate State: chartType");
 
         this.getDataFromSolr();
       }
@@ -165,7 +175,7 @@ class DynamicChart extends React.Component {
 
   }
 
-  convertSolrDataToD3Data(data){
+  convertSolrDataToBarData(data){
 
     let barChartDataArray = [];
     const _this = this;
@@ -204,6 +214,29 @@ class DynamicChart extends React.Component {
 
   }
 
+  convertSolrDataToPieData(data){
+
+    console.log(data);
+
+    let innerChartData = [];
+    let outerChartData = [];
+
+    data.forEach(function (d) {
+
+      innerChartData.push({"name": d.value, "value": d.count});
+
+      d.pivot.forEach(function (e) {
+        outerChartData.push({"name": e.value, "value": e.count})
+      });
+    });
+
+    console.log("PieChartData:");
+    console.log([innerChartData, outerChartData]);
+
+    return [innerChartData, outerChartData];
+
+  }
+
   handleXaxisChange(e) {
     console.log("Changing X Axis value to: " + e.target.value);
 
@@ -224,12 +257,13 @@ class DynamicChart extends React.Component {
 
   handleChartTypeChange(e) {
     console.log("Changing chart type to: " + e.target.value);
-    // e.preventDefault();
-    //
-    // this.setState({
-    //   chartType: e.target.value
-    // })
+
+    this.setState({
+      chartType: e.target.value,
+      data: []
+    })
   }
+
 
 
   render() {
@@ -238,15 +272,12 @@ class DynamicChart extends React.Component {
 
     if (this.state.chartType == 'bar' && this.state.data.length != 0) {
 
-      chart = <StackedChart width={475} height={280} data={this.state.data} xField={this.state.xAxisValue} />;
+      chart = <StackedChart width={475} height={280} data={this.state.data} xField={this.state.xAxisValue} colorMap={this.props.colorMap}/>;
 
     } else if(this.state.chartType == 'pie' && this.state.data.length != 0) {
-      console.log(this.state.xValue);
-      console.log(this.state.chartSeries);
-      // console.log(value);
-      chart = <DynamicPieChart width={490} height={280} data={this.state.data} series={this.state.chartSeries}
-                               name={this.state.xValue}
-                               value={value}/>;
+
+      chart = <MultiLevelPieChart width={475} height={280} data={this.state.data} colorMap={this.props.colorMap}/>
+
     }
 
 
@@ -255,7 +286,7 @@ class DynamicChart extends React.Component {
            style={{width: '100%', height: '200px', border: '4px', color: 'black', textAlign: 'center'}}>
         <div className="row">
           <div className="col-md-3">
-            Series
+            {this.state.chartType == 'bar' ? "Series" : "Outer"}
             <AxisYInput handler={this.handleYaxisChange} xValue={this.state.yAxisValue}/>
           </div>
           <div className="col-md-6">
@@ -270,9 +301,10 @@ class DynamicChart extends React.Component {
         <div className="row">
           {chart}
         </div>
+
         <div className="row">
           <div className="col-md-3">
-            X Axis
+            {this.state.chartType == 'bar' ? "X Axis" : "Inner"}
             <AxisXInput handler={this.handleXaxisChange} xValue={this.state.xAxisValue}/>
           </div>
           <div className="col-md-6">
