@@ -33,14 +33,14 @@ class CategorySelectionPanel extends React.Component {
   componentWillMount() {
 
     const _this = this;
-    axios.get("http://localhost:8983/solr/stats_test_data/select?facet.field=Category&facet.query=*&facet=on&indent=on&q=*:*&rows=0&wt=json")
+    axios.get("http://localhost:8983/solr/appData/select?facet.field=Category&facet.query=*&facet=on&indent=on&q=*:*&rows=0&wt=json")
       .then(function (d) {
         const theArray = d.data.facet_counts.facet_fields.Category;
         for (var i = 1; i <= theArray.length; i += 1)
           theArray.splice(i, 1);
 
         _this.setState({
-          initialCategoryArray: theArray
+          initialCategoryArray: theArray.sort()
         });
       });
   }

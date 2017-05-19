@@ -21,10 +21,10 @@ class Sidebar extends React.Component {
             <div className="panel-heading-blue" id="heading1">
               <h4 className="panel-title">
                 <a className="glyphicon glyphicon-asterisk pad14" href="#collapseOne"></a>
-                <a className="accordion-toggle collapsed" data-toggle="collapse" href="#collapseOne">Sources</a>
+                <a className="accordion-toggle" data-toggle="collapse" href="#collapseOne">Sources</a>
               </h4>
             </div>
-            <div id="collapseOne" className="panel-collapse collapse">
+            <div id="collapseOne" className="panel-collapse collapse in">
               <div className="panel-body">
                 <SourceSelectionPanel handler={this.props.sourceHandler} selectedSources={this.props.selectedSources}/>
                 <div className="hero-circle">

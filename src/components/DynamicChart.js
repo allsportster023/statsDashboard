@@ -78,7 +78,7 @@ class DynamicChart extends React.Component {
   }
 
   createSolrQueryString(){
-    let solrQueryStr = "http://localhost:8983/solr/stats_test_data/select?wt=json&indent=true&rows=0&q=";
+    let solrQueryStr = "http://localhost:8983/solr/appData/select?wt=json&indent=true&rows=0&q=";
 
     solrQueryStr += "Source:";
     solrQueryStr += this.convertArrayToSolrSyntax(this.props.sources);

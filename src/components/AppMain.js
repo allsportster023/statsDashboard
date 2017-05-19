@@ -1,10 +1,10 @@
 import React from 'react';
 import Map from './Map';
-import MapLegend from './MapLegend';
 import Sidebar from './Sidebar';
 import DynamicChart from './DynamicChart';
+import TablePanel from './TablePanel';
 
-var colorMap = {};
+let colorMap = {};
 
 
 let alreadyCreatedColors= false;
@@ -103,7 +103,7 @@ class AppMain extends React.Component {
 
     console.log("AppMain: Handling SOURCE change");
     this.setState({
-      sources: e
+      sources: e.sort()
     });
   }
 
@@ -112,7 +112,7 @@ class AppMain extends React.Component {
 
     console.log("Handling CATEGORY change");
     this.setState({
-      categories: e
+      categories: e.sort()
     });
   }
 
@@ -120,7 +120,7 @@ class AppMain extends React.Component {
 
     console.log("AppMain: Handling CODE change");
     this.setState({
-      codes: e
+      codes: e.sort()
     });
   }
 
@@ -170,9 +170,19 @@ class AppMain extends React.Component {
                      selectedSources={this.state.sources} startEndTimes={this.state.timeframe}
                      categoryArray={this.state.categories} codeArray={this.state.codes}/>
           </div>
-          <div className="col-md-5 map">
-            <Map size={{width: '100%', height: '50vh'}}/>
-            <MapLegend />
+          <div className="col-md-5">
+            <div className="container-fluid">
+              <div className="row">
+                <div className="map">
+                  <Map size={{width: '100%', height: '50vh'}} sources={this.state.sources} timeframe={this.state.timeframe}
+                       categories={this.state.categories} codes={this.state.codes} colorMap={colorMap}/>
+                </div>
+              </div>
+              <div className="row table2">
+                <TablePanel sources={this.state.sources} timeframe={this.state.timeframe}
+                            categories={this.state.categories} codes={this.state.codes} colorMap={colorMap}/>
+              </div>
+            </div>
           </div>
           <div className="col-md-4 upperChart">
             <DynamicChart sources={this.state.sources} timeframe={this.state.timeframe}
