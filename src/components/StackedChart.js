@@ -1,4 +1,5 @@
 import React from 'react';
+const {PropTypes} = React;
 import {Brush, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend} from 'recharts';
 
 const unique = function(arr)
@@ -27,6 +28,29 @@ const CustomizedAxisTick = React.createClass({
   }
 });
 
+const CustomTooltip  = React.createClass({
+
+  render() {
+    const { active } = this.props;
+
+    if (active) {
+      const { payload, label } = this.props;
+      return (
+        <div className="custom-tooltip">
+          <p className="tip-label"><b>{label}</b></p>
+          {payload.map(function (val, idx) {
+            if(val.value)
+              return (<p key={idx} className="desc" style={{color: val.fill}}><b>{val.name} : {val.value}</b></p>
+            )
+          })}
+        </div>
+      );
+    }
+
+    return null;
+  }
+});
+
 
 
 class StackedChart extends React.Component {
@@ -49,7 +73,7 @@ class StackedChart extends React.Component {
                 margin={{top: 20, right: 0, left: 0, bottom: 40}}>
         <XAxis dataKey={this.props.xField} tick={<CustomizedAxisTick/>} minTickGap={0} axisLine={{stroke: 'white', strokeWidth: '3'}} label="HI"/>
         <YAxis tick={{stroke: 'white'}} axisLine={{stroke: 'white'}} />
-        <Tooltip/>
+        <Tooltip content={<CustomTooltip />}/>
         {/*<Legend />*/}
          {unique(fields).map((field, idx) =>
 

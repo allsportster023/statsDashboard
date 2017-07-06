@@ -97,8 +97,8 @@ class DynamicChart extends React.Component {
   }
 
   createPivotCall(urlStr){
-    //&facet.pivot.mincount=1
-    urlStr += "&facet=true&facet.sort=index&facet.pivot=";
+    //&facet.pivot.mincount=0
+    urlStr += "&facet.pivot.mincount=0&facet=true&facet.sort=index&facet.pivot=";
     urlStr += this.state.xAxisValue + "," + this.state.yAxisValue;
 
     return urlStr;
@@ -125,8 +125,6 @@ class DynamicChart extends React.Component {
           })
 
         }
-
-
       });
 
   }
