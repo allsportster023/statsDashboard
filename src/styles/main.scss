@@ -55,22 +55,22 @@ section {
  }
 }
 
+.accordion-toggle-no-icon:after{
+  content: none;
+}
+
+.top-align {
+  vertical-align: top;
+}
+
 .panel-heading-blue .accordion-toggle:after {
+  vertical-align: top;
     font-family: 'Glyphicons Halflings';
     content: "\e114";
     float: right;
     color: white;
 }
 .panel-heading-blue .accordion-toggle.collapsed:after {
-    content: "\e080";
-}
-.panel-heading-darkgray .accordion-toggle:after {
-    font-family: 'Glyphicons Halflings';
-    content: "\e114";
-    float: right;
-    color: white;
-}
-.panel-heading-darkgray .accordion-toggle.collapsed:after {
     content: "\e080";
 }
 
@@ -249,6 +249,9 @@ h4 {
 .pad14 {
   padding-right: 14px;
 }
+.pad14_left {
+  padding-left: 14px;
+}
 .logoSize {
   width: 20%;
   margin-top: -15px;
@@ -315,3 +318,53 @@ h4 {
   padding-left: 2px;
 }
 
+.Collapsible__contentOuter {
+  padding-top: 5px;
+}
+
+.Collapsible__trigger {
+  display: block;
+  text-decoration: none;
+  position: relative;
+  padding: 10px;
+  background: #34b8c9;
+  color: white;
+  font-family: inherit;
+  font-weight: 500;
+  line-height: 1.1;
+  height: 35px;
+
+}
+
+.Collapsible__trigger-sibling {
+  position: relative;
+}
+
+.Collapsible__trigger:after {
+  font-family: 'Glyphicons Halflings';
+  content: "\e080";
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  display: block;
+  transition: transform 300ms; }
+.Collapsible__trigger.is-open:after {
+  transform: rotateZ(180deg); }
+.Collapsible__trigger.is-disabled {
+  opacity: 0.5;
+  background-color: grey; }
+
+.CustomTriggerCSS {
+  background-color: lightcoral;
+  transition: background-color 200ms ease; }
+
+.CustomTriggerCSS--open {
+  background-color: darkslateblue; }
+
+#selectableComponent {
+  position: relative;
+  text-align: center;
+  //margin-top: -25px;
+  padding-left: 7px;
+  width: 100%;
+}

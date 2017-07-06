@@ -2,7 +2,7 @@ import React from 'react';
 import Map from './Map';
 import Sidebar from './Sidebar';
 import DynamicChart from './DynamicChart';
-import TablePanel from './TablePanel';
+import TableOrGraphPanel from './TableOrGraphPanel';
 
 let colorMap = {};
 
@@ -179,7 +179,7 @@ class AppMain extends React.Component {
                 </div>
               </div>
               <div className="row table2">
-                <TablePanel sources={this.state.sources} timeframe={this.state.timeframe}
+                <TableOrGraphPanel sources={this.state.sources} timeframe={this.state.timeframe}
                             categories={this.state.categories} codes={this.state.codes} colorMap={colorMap}/>
               </div>
             </div>

@@ -60,6 +60,10 @@ class DynamicChart extends React.Component {
     }
   }
 
+  componentDidMount(){
+    this.getDataFromSolr();
+  }
+
   convertArrayToSolrSyntax(arr) {
 
     let solrStr = "(";
@@ -283,7 +287,7 @@ class DynamicChart extends React.Component {
 
     return (
       <div className="container-fluid"
-           style={{width: '100%', height: '200px', border: '4px', color: 'black', textAlign: 'center'}}>
+           style={{width: '515px', height: '200px', border: '4px', color: 'black', textAlign: 'center'}}>
         <div className="row">
           <div className="col-md-3">
             {this.state.chartType == 'bar' ? "Series" : "Outer"}

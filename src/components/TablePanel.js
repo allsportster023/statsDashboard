@@ -11,6 +11,10 @@ class TablePanel extends React.Component {
     };
   }
 
+  componentDidMount(){
+    this.getDataFromSolr();
+  }
+
   componentDidUpdate(nextProps, nextState) {
 
     if(this.props != nextProps) {
@@ -19,8 +23,6 @@ class TablePanel extends React.Component {
         this.props.categories.length != 0 &&
         this.props.codes.length != 0 &&
         this.props.colorMap) {
-
-          console.log("Creating TablePanel");
 
           this.getDataFromSolr();
 
@@ -34,15 +36,15 @@ class TablePanel extends React.Component {
     axios.get(startUrl)
       .then(function (d) {
 
-          _this.setState({
-            data: d.data.response.docs,
-          })
+        _this.setState({
+          data: d.data.response.docs,
+        })
 
       });
 
   }
 
-  createSolrQueryString(){
+  createSolrQueryString() {
     let solrQueryStr = "http://localhost:8983/solr/appData/select?wt=json&indent=true&rows=50&q=";
 
     solrQueryStr += "Source:";
@@ -51,7 +53,7 @@ class TablePanel extends React.Component {
     solrQueryStr += this.convertArrayToSolrSyntax(this.props.categories);
     solrQueryStr += " AND Code:";
     solrQueryStr += this.convertArrayToSolrSyntax(this.props.codes);
-    solrQueryStr += " AND Date:["+new Date(this.props.timeframe[0]).toISOString()+" TO "+new Date(this.props.timeframe[1]).toISOString()+"]";
+    solrQueryStr += " AND Date:[" + new Date(this.props.timeframe[0]).toISOString() + " TO " + new Date(this.props.timeframe[1]).toISOString() + "]";
 
     return solrQueryStr;
 
@@ -78,33 +80,29 @@ class TablePanel extends React.Component {
 
     return (
       <div>
-        <div className="panel panel-default" id="panel1">
-          <div className="panel-heading-blue" id="heading1">
-            <h4 className="panel-title">
-              <a className="glyphicon glyphicon-list pad14" href="#collapseTable"></a>
-              <a className="accordion-toggle collapsed" data-toggle="collapse" href="#collapseTable">Table</a>
-            </h4>
-          </div>
-          <div id="collapseTable" className="panel-collapse collapse">
-            <div className="panel-body" style={{maxHeight: "30vh", overflowY: "scroll"}}>
-              <table className="table table-hover table-bordered table-condensed">
-                <thead>
-                <tr>
-                  <th>Date</th>
-                  <th>Source</th>
-                  <th>Category</th>
-                  <th>Code</th>
-                  <th>Location</th>
-                </tr>
-                </thead>
-                <tbody>
-                {this.state.data.map(function (d, idx) {
-                  return <tr key={idx}><td>{d.Date}</td><td>{d.Source}</td><td>{d.Category}</td><td>{d.Code}</td><td>{d.Location}</td></tr>;
-                })}
-                </tbody>
-              </table>
-            </div>
-          </div>
+        <div className="panel" style={{maxHeight: "30vh", overflowY: "scroll"}}>
+          <table className="table table-hover table-bordered table-condensed">
+            <thead>
+            <tr>
+              <th>Date</th>
+              <th>Source</th>
+              <th>Category</th>
+              <th>Code</th>
+              <th>Location</th>
+            </tr>
+            </thead>
+            <tbody>
+            {this.state.data.map(function (d, idx) {
+              return <tr key={idx}>
+                <td>{d.Date}</td>
+                <td>{d.Source}</td>
+                <td>{d.Category}</td>
+                <td>{d.Code}</td>
+                <td>{d.Location}</td>
+              </tr>;
+            })}
+            </tbody>
+          </table>
         </div>
       </div>
     )
