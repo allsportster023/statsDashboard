@@ -5,6 +5,7 @@ import StackedChart from './StackedChart';
 import AxisYInput from './AxisYInput';
 import AxisXInput from './AxisXInput';
 import ChartTypeInput from './ChartTypeInput';
+import ShowGapInput from './ShowGapInput';
 import MultiLevelPieChart from './MultiLevelPieChart';
 
 const flatten = function (input) {
@@ -39,6 +40,7 @@ class DynamicChart extends React.Component {
     this.handleXaxisChange = this.handleXaxisChange.bind(this);
     this.handleYaxisChange = this.handleYaxisChange.bind(this);
     this.handleChartTypeChange = this.handleChartTypeChange.bind(this);
+    this.handleGapChange = this.handleGapChange.bind(this);
 
     this.convertArrayToSolrSyntax = this.convertArrayToSolrSyntax.bind(this);
     this.createSolrQueryString = this.createSolrQueryString.bind(this);
@@ -54,7 +56,7 @@ class DynamicChart extends React.Component {
       xAxisValue: 'Date',
       yAxisValue: 'Source',
       chartType: 'bar',
-
+      showGaps: true,
       xScale: 'ordinal'
 
     }
@@ -97,8 +99,12 @@ class DynamicChart extends React.Component {
   }
 
   createPivotCall(urlStr){
-    //&facet.pivot.mincount=0
-    urlStr += "&facet.pivot.mincount=0&facet=true&facet.sort=index&facet.pivot=";
+
+    if(this.state.showGaps){
+      urlStr += "&facet.pivot.mincount=0"
+    }
+
+    urlStr += "&facet=true&facet.sort=index&facet.pivot=";
     urlStr += this.state.xAxisValue + "," + this.state.yAxisValue;
 
     return urlStr;
@@ -155,6 +161,10 @@ class DynamicChart extends React.Component {
 
         this.getDataFromSolr();
       } else if (this.state.chartType != nextState.chartType) {
+        console.log("DynamicChart: componentDidUpdate State: chartType");
+
+        this.getDataFromSolr();
+      } else if (this.state.showGaps != nextState.showGaps) {
         console.log("DynamicChart: componentDidUpdate State: chartType");
 
         this.getDataFromSolr();
@@ -257,6 +267,16 @@ class DynamicChart extends React.Component {
 
   }
 
+  handleGapChange(e) {
+    console.log("Changing Gap value to: ");
+    console.log(typeof e.target.value);
+
+    this.setState({
+      showGaps: (e.target.value == 'true')
+    });
+
+  }
+
   handleChartTypeChange(e) {
     console.log("Changing chart type to: " + e.target.value);
 
@@ -311,6 +331,10 @@ class DynamicChart extends React.Component {
           </div>
           <div className="col-md-6">
             {/*{this.state.xAxisValue.charAt(0).toUpperCase() + this.state.xAxisValue.slice(1)}*/}
+          </div>
+          <div className="col-md-3">
+            {this.state.chartType == 'bar' ? "Show Gaps" : null }
+            {this.state.chartType == 'bar' ? <ShowGapInput handler={this.handleGapChange} showGaps={this.state.showGaps}/> : null}
           </div>
         </div>
       </div>
