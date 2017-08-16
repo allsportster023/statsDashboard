@@ -83,7 +83,7 @@ class TablePanel extends React.Component {
         <div className="panel" style={{maxHeight: "30vh", overflowY: "scroll"}}>
           <table className="table table-hover table-bordered table-condensed">
             <thead>
-            <tr>
+            <tr tableHead>
               <th>Date</th>
               <th>Source</th>
               <th>Category</th>
