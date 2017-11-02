@@ -9,10 +9,11 @@ class CheckboxItem extends React.Component {
   render() {
 
     return (
-      <div className="checkbox" key={this.props.value}>
-        <label>
-          <input type="checkbox" className="check" onChange={this.props.handler} id={this.props.value} checked={this.props.checked}/> {this.props.value}
-        </label>
+      <div className="control-group">
+      	<label className="control control--checkbox" key={this.props.value}>
+      		<input type="checkbox" onChange={this.props.handler} id={this.props.value} checked={this.props.checked}/> {this.props.value}
+      		<div className="control__indicator"></div>
+      	</label>
       </div>
     )
   }

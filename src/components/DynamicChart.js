@@ -304,17 +304,17 @@ class DynamicChart extends React.Component {
 
 
     return (
-      <div className="container-fluid"
-           style={{width: '515px', height: '200px', border: '4px', color: 'black', textAlign: 'center'}}>
+      <div className="container-fluid chart-title">
         <div className="row">
-          <div className="col-md-3">
+          <div className="col-md-12 chart-header">
+            {this.state.xAxisValue+" by "+this.state.yAxisValue}
+          </div>
+          <div className="col-md-3 drop-title">
             {this.state.chartType == 'bar' ? "Series" : "Outer"}
             <AxisYInput handler={this.handleYaxisChange} xValue={this.state.yAxisValue}/>
           </div>
-          <div className="col-md-6">
-            {this.state.xAxisValue+" by "+this.state.yAxisValue}
-          </div>
-          <div className="col-md-3">
+          <div className="col-md-5"></div>
+          <div className="col-md-3 drop-title">
             Chart Type
             <ChartTypeInput handler={this.handleChartTypeChange} chartType={this.state.chartType}/>
           </div>
@@ -325,14 +325,14 @@ class DynamicChart extends React.Component {
         </div>
 
         <div className="row">
-          <div className="col-md-3">
+          <div className="col-md-3 drop-title">
             {this.state.chartType == 'bar' ? "X Axis" : "Inner"}
             <AxisXInput handler={this.handleXaxisChange} xValue={this.state.xAxisValue}/>
           </div>
-          <div className="col-md-6">
+          <div className="col-md-5">
             {/*{this.state.xAxisValue.charAt(0).toUpperCase() + this.state.xAxisValue.slice(1)}*/}
           </div>
-          <div className="col-md-3">
+          <div className="col-md-3 drop-title">
             {this.state.chartType == 'bar' ? "Show Gaps" : null }
             {this.state.chartType == 'bar' ? <ShowGapInput handler={this.handleGapChange} showGaps={this.state.showGaps}/> : null}
           </div>

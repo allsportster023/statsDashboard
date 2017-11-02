@@ -41,4 +41,6 @@ class MapLegend extends React.Component {
     )}
 }
 
+
+
 export default MapLegend

@@ -83,7 +83,7 @@ var ResultItem = React.createClass({
         <td>{objective._source.priority}</td>
         <td>{objective._source.targets}</td>
         <td>{objective._source.start}</td>
-        <td>{objective._source.end}</td>      
+        <td>{objective._source.end}</td>
       </tr>
     );
   }
