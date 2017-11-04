@@ -1,25 +1,77 @@
 import React from 'react';
+import {DateField, DatePicker, TransitionView} from 'react-date-picker';
 
 
+class DateTimePicker extends React.Component {
 
-class DatePicker extends React.Component {
-    static propTypes = {
-        onClick: PropTypes.func,
-        value: PropTypes.string
-    }
+  constructor(props) {
+    super(props);
 
+    this.startTimeVal = 0;
+    this.endTimeVal = 0;
 
+  }
 
-    render() {
-        const {value, onClick} = this.props;
+  render() {
 
-        return (
-            <div className="form-group">
-                <input type="text" className="form-control" value={value} onClick={onClick}/>
-                <IconCalendar className="date-picker-icon" onClick={onClick}></IconCalendar>
-            </div>
-        );
-    }
+    return (
+      <div>
+        <div>
+          <div className="col-md-3 blueText">Start Time</div>
+          <div className="calendar">
+            <DateField
+              dateFormat="YYYY-MM-DD HH:mm:ss"
+              forceValidDate={true}
+              defaultValue={this.props.startTime}
+              onChange={(dateString, {dateMoment, timestamp}) => {
+                console.log(this.startTimeVal);
+                this.props.handler(this.startTimeVal, null);
+              }}
+            >
+              <TransitionView>
+                <DatePicker
+                  navigation={true}
+                  highlightWeekends={true}
+                  highlightToday={true}
+                  weekStartDay={0}
+                  weekNumbers={false}
+                  onChange={(dateString, {dateMoment, timestamp}) => {
+                    this.startTimeVal = timestamp;
+                  }}
+                />
+              </TransitionView>
+            </DateField>
+          </div>
+        </div>
+        <div>
+          <div className="col-md-3 blueText">End Time</div>
+          <div className="calendar">
+            <DateField
+              dateFormat="YYYY-MM-DD HH:mm:ss"
+              forceValidDate={true}
+              defaultValue={this.props.endTime}
+              onChange={(dateString, {dateMoment, timestamp}) => {
+                this.props.handler(null, this.endTimeVal);
+              }}
+            >
+              <TransitionView>
+                <DatePicker
+                  navigation={true}
+                  highlightWeekends={true}
+                  highlightToday={true}
+                  weekStartDay={0}
+                  weekNumbers={false}
+                  onChange={(dateString, {dateMoment, timestamp}) => {
+                    this.endTimeVal = timestamp;
+                  }}
+                />
+              </TransitionView>
+            </DateField>
+          </div>
+        </div>
+      </div>
+    );
+  }
 }
 
-
+export default DateTimePicker

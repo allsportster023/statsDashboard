@@ -55,22 +55,22 @@ section {
  }
 }
 
+.accordion-toggle-no-icon:after{
+  content: none;
+}
+
+.top-align {
+  vertical-align: top;
+}
+
 .panel-heading-blue .accordion-toggle:after {
+  vertical-align: top;
     font-family: 'Glyphicons Halflings';
     content: "\e114";
     float: right;
     color: white;
 }
 .panel-heading-blue .accordion-toggle.collapsed:after {
-    content: "\e080";
-}
-.panel-heading-darkgray .accordion-toggle:after {
-    font-family: 'Glyphicons Halflings';
-    content: "\e114";
-    float: right;
-    color: white;
-}
-.panel-heading-darkgray .accordion-toggle.collapsed:after {
     content: "\e080";
 }
 
@@ -84,7 +84,7 @@ section {
   padding: none !important;
   }
 .panel-heading-blue{
-  background-color: #34b8c9;
+  background-color: #02B3CE;
   color: white;
   margin: none;
   padding: none;
@@ -231,7 +231,6 @@ h4 {
   color: gray;
   font-weight: bold;
   padding: 5px;
-  padding-top: -30px;
   text-align: center;
 }
 .keyBox {
@@ -241,7 +240,6 @@ h4 {
   background: green;
   display: block;
   align: center;
-  margin: auto;
 
 }
 .keyLabel {
@@ -250,6 +248,9 @@ h4 {
 }
 .pad14 {
   padding-right: 14px;
+}
+.pad14_left {
+  padding-left: 14px;
 }
 .logoSize {
   width: 20%;
@@ -263,89 +264,16 @@ h4 {
   padding-top: 20px !important;
   padding-bottom: 20px !important;
 }
-.pink {
-  background-color: #ff0083;
-}
-.medBlue {
-  background-color: #0048ff;
-}
-.orange {
-  background-color: #ff9000;
-}
-.yellow {
-  background-color: #ffee00;
-}
-.lime {
-  background-color: #00ff11;
-}
-.turquoise {
-  background-color: #34b8c9;
-}
-.purple {
-  background-color: #a100ff;
-}
-.maroon {
-  background-color: #990101;
-}
-.green {
-  background-color: #019948;
-}
-.magenta {
-  background-color: #f842ff;
-}
 
-.checkbox{
-  border-radius: 3px;
-  display: block;
-  align: center;
-  margin-left: 20px;
-}
-
-
-
-.box1 {
-  background-color: green;
-  background: orange;
-  color: yellow;
-}
-
-
-
-
-
-
-
-
-
-
-
-.css-label {
-  background-image: url(http://codeopus.net/file/blog/check1.png);
-  max-width: 20px;
-  max-height: 20px;
-  }
-
-.css-label-red {
-  background-image: url(http://codeopus.net/file/blog/check2.png);
-}
-
-.css-label-yellow {
-  background-image: url(http://codeopus.net/file/blog/check3.png);
-}
-
-.css-label-blue {
-  background-image: url(http://codeopus.net/file/blog/check4.png);
-}
-
-.css-label-purple {
-  background-image: url(http://codeopus.net/file/blog/check5.png);
-}
 
 .calendar {
   color: gray;
   background-color: none;
   text-align: center;
 
+}
+.darkBg {
+  background-color: black;
 }
 
 .date-picker-icon {
@@ -368,13 +296,343 @@ h4 {
 
 }
 .blueText {
-  color: #34b8c9;
+  color: #02B3CE;
   font-size: 12px;
   text-align: center;
   vertical-align: middle;
   padding: 6px 0px 6px 0px !important;
 }
 .duration-btn {
-  color: #34b8c9;
+  color: #02B3CE;
+  background-color: white;
 }
 
+.selectAllNone {
+  padding: 15px 15px;
+}
+
+.table2 {
+  margin-top: 15px;
+  padding-left: 2px;
+  box-shadow: 1px 5px 18px black;
+  color: #595959;
+}
+
+.Collapsible__contentOuter {
+  padding-top: 5px;
+}
+
+.Collapsible__trigger {
+  display: block;
+  text-decoration: none;
+  position: relative;
+  padding: 10px;
+  background: #02B3CE;
+  color: white;
+  font-family: inherit;
+  font-weight: 500;
+  line-height: 1.1;
+  height: 35px;
+
+}
+
+.Collapsible__trigger-sibling {
+  position: relative;
+}
+
+.Collapsible__trigger:after {
+  font-family: 'Glyphicons Halflings';
+  content: "\e080";
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  display: block;
+  transition: transform 50ms; }
+.Collapsible__trigger.is-open:after {
+  transform: rotateZ(180deg); }
+.Collapsible__trigger.is-disabled {
+  opacity: 0.5;
+  background-color: grey; }
+
+.CustomTriggerCSS {
+  background-color: lightcoral;
+  transition: background-color 50ms ease; }
+
+.CustomTriggerCSS--open {
+  background-color: darkslateblue; }
+
+#selectableComponent {
+  position: relative;
+  text-align: center;
+  //margin-top: -25px;
+  padding-left: 7px;
+  width: 100%;
+}
+.upperChart {
+  box-shadow: 1px 5px 18px black;
+  padding-bottom: 10px;
+}
+.lowerChart {
+  margin-top: 15px;
+  padding-bottom: 10px;
+  box-shadow: 1px 5px 18px black;
+}
+
+.custom-tooltip {
+  background-color: #d5d5d5;
+  border-color: black;
+  border: double;
+  padding: 10px;
+  transition: background-color 200ms ease;
+}
+.chart-header {
+  background: rgba(255,255,255,0.1);
+  color: gray;
+  font-weight: bold;
+  font-size: 16px;
+  padding: 10px;
+  margin-left: -15px;
+}
+.dropdown select {
+  border-color: #444444;
+  color: gray;
+  text-align: left;
+  background-color: #262626;
+  border-radius: 0px !important;
+}
+.dropdown {
+  background-color: #262626;
+  border-radius: 0px !important;
+}
+.drop-title{
+  color: lightgray;
+  text-align: left;
+  font-weight: bold;
+  font-size: 12px;
+}
+.ranges li {
+  color: #262626 !important;
+}
+
+.drop-right {
+  float: right;
+}
+.drop-select {
+  width: 100px !important;
+  margin: 0px;
+  background-color: #262626;
+  border-color: #262626;
+  line-height: 10px;
+}
+.bootstrap-select {
+  width: 300px;
+}
+
+.bootstrap-select.btn-group .dropdown-menu li a {
+  background-color: #262626;
+  color: lightgray;
+}
+.bootstrap-select.btn-group .dropdown-menu {
+  background-color: #262626;
+  color: lightgray;
+}
+.chart-title {
+  width: 106%;
+  height: 200px;
+  border: 4px;
+  color: black;
+  text-align: center;
+}
+.recharts-cartesian-axis-ticks {
+  font-size: 12px;
+}
+
+.daterangepicker.dropdown-menu {
+  background-color: #262626;
+}
+.ranges li.active {
+  background-color: gray !important;
+}
+.ranges li ::hover {
+  background-color: orange !important;
+}
+.applyBtn {
+  background-color: #02B3CE !important;
+  border-color: #02B3CE !important;
+  drop-shadow: 3px 3px 10px black;
+}
+.btn-group>.btn {
+  line-height: 10px;
+  padding-top: 3px;
+  padding-bottom: 4px;
+  font-size: 12px;
+}
+.btn.focus, .btn:focus, .btn:hover {
+  color: gray !important;
+}
+
+
+.tableHead {
+  background-color: #262626;
+  color: white;
+}
+.selectAllNone:hover {
+  color: gray;
+  text-decoration: none;
+}
+.selectAllNone:focus {
+  color: gray;
+  text-decoration: none;
+}
+
+
+
+
+
+
+
+/* .react-date-picker */
+.react-date-picker__nav-bar-date {
+  font-size: 20px;
+  font-weight: bold;
+  color: #02B3CE;
+}
+.react-date-picker__month-view--theme-default .react-date-picker__month-view-day--value .react-date-picker__month-view-day-text {
+  background: #02B3CE !important;
+  border: none !important;
+  font-weight: bold !important;
+}
+.react-date-picker__month-view-day--active .react-date-picker__month-view-day-text{
+  border: 2px solid #02B3CE !important;
+}
+.react-date-picker__date-format-spinner--theme-default{
+  border-radius: 8px;
+  padding: 2px;
+}
+.react-flex react-date-picker__date-format-spinner react-date-picker__date-format-spinner--theme-default react-flex-v2--align-items-center react-flex-v2--wrap react-flex-v2--row react-flex-v2--display-inline-flex {
+  background: white !important;
+}
+.react-flex-v2--column react-flex-v2--display-inline-flex {
+  background: white !important;
+}
+.react-date-picker__footer-button {
+  background: #02B3CE !important;
+  color: white;
+  border: none;
+  font-size: 15px !important;
+  font-weight: bold;
+}
+.react-flex {
+  background: #282828;
+}
+.react-date-picker__date-format-spinner-arrow{
+  background: white;
+  margin: -2px;
+  border-radius: 8px;
+}
+.react-date-picker__date-format-spinner{
+  background: white;
+  font-size: 16px;
+}
+.react-date-field__picker {
+  box-shadow: 3px 3px 10px black;
+}
+
+
+
+
+/* checkbox */
+.control-group {
+	display: inline-block;
+	width: 200px;
+	height: 10px;
+	margin: 10px;
+	padding: 5px;
+	text-align: left;
+	vertical-align: top;
+}
+.control {
+	font-size: 14px;
+	font-weight: normal;
+	position: relative;
+	display: block;
+	margin-bottom: 10px;
+	padding-left: 30px;
+	cursor: pointer;
+}
+
+.control input {
+	position: absolute;
+	z-index: -1;
+	opacity: 0;
+}
+.control__indicator {
+	position: absolute;
+	top: 2px;
+	left: 0;
+	width: 15px;
+	height: 15px;
+	background: #e6e6e6;
+  border-radius: 3px;
+  box-shadow: 1px 1px 5px #262626;
+}
+
+.control--radio .control__indicator {
+	border-radius: 50%;
+}
+/* Hover and focus states */
+.control:hover input ~ .control__indicator,
+.control input:focus ~ .control__indicator {
+	background: #ccc;
+}
+
+/* Checked state */
+.control input:checked ~ .control__indicator {
+	background: #2aa1c0;
+}
+
+/* Hover state whilst checked */
+.control:hover input:not([disabled]):checked ~ .control__indicator,
+.control input:checked:focus ~ .control__indicator {
+	background: #0e647d;
+}
+
+/* Disabled state */
+.control input:disabled ~ .control__indicator {
+	pointer-events: none;
+	opacity: .6;
+	background: #e6e6e6;
+}
+
+/* Check mark */
+.control__indicator:after {
+	position: absolute;
+	display: none;
+	content: '';
+}
+
+/* Show check mark */
+.control input:checked ~ .control__indicator:after {
+	display: block;
+}
+
+/* Checkbox tick */
+.control--checkbox .control__indicator:after {
+	top: 2.5px;
+	left: 5.5px;
+	width: 3px;
+	height: 8px;
+	transform: rotate(45deg);
+	border: solid #fff;
+	border-width: 0 2px 2px 0;
+}
+
+/* Disabled tick colour */
+.control--checkbox input:disabled ~ .control__indicator:after {
+	border-color: #7b7b7b;
+}
+
+/* Disabled circle colour */
+.control--radio input:disabled ~ .control__indicator:after {
+	background: #7b7b7b;
+}
