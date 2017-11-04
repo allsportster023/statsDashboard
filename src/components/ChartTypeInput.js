@@ -9,7 +9,8 @@ class ChartTypeInput extends React.Component {
   render() {
 
     return (
-      <select className="selectpicker drop-select" data-style="dropdown" value={this.props.chartType} onChange={this.props.handler}>
+      <select className="selectpicker drop-select" data-style="dropdown" value={this.props.chartType}
+              onChange={this.props.handler}>
         <option value="bar">Bar Chart</option>
         <option value="pie">Pie Chart</option>
       </select>

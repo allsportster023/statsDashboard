@@ -12,12 +12,14 @@ class SelectableComponent extends React.Component {
 
     return (
       <div id="selectableComponent">
-        <a className="glyphicon glyphicon-list pad14 top-align" onClick={this.props.changeType.bind(this, 'table')} style={{cursor: 'pointer'}}/>
-        <a className="top-align" onClick={this.props.changeType.bind(this, 'table')} style={{cursor: 'pointer'}}>Table</a>
+        <a className="glyphicon glyphicon-list pad14 top-align" onClick={this.props.changeType.bind(this, 'table')}
+           style={{cursor: 'pointer'}}/>
+        <a className="top-align" onClick={this.props.changeType.bind(this, 'table')}
+           style={{cursor: 'pointer'}}>Table</a>
         <ToggleButton
           containerStyle={{display: "inline-flex", margin: "0px 10px"}}
-          value={ this.props.tableSelected }
-          onToggle={ this.props.changeType }
+          value={this.props.tableSelected}
+          onToggle={this.props.changeType}
           inactiveLabel={''}
           activeLabel={''}
           colors={{
@@ -38,8 +40,10 @@ class SelectableComponent extends React.Component {
           }}
         />
 
-        <a className="top-align" onClick={this.props.changeType.bind(this, 'graph')} style={{cursor: 'pointer'}}>Graph</a>
-        <a className="glyphicon glyphicon-equalizer pad14_left top-align" onClick={this.props.changeType.bind(this, 'graph')} style={{cursor: 'pointer'}}/>
+        <a className="top-align" onClick={this.props.changeType.bind(this, 'graph')}
+           style={{cursor: 'pointer'}}>Graph</a>
+        <a className="glyphicon glyphicon-equalizer pad14_left top-align"
+           onClick={this.props.changeType.bind(this, 'graph')} style={{cursor: 'pointer'}}/>
       </div>
     )
   }

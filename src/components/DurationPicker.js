@@ -27,24 +27,25 @@ class DurationPicker extends React.Component {
     }
   }
 
-	handleEvent(event, picker) {
+  handleEvent(event, picker) {
 
     this.props.handler(picker.startDate, picker.endDate);
 
-		this.setState({
-			startDate: picker.startDate,
-			endDate: picker.endDate,
-			currentRange: picker.chosenLabel
-		});
-	}
+    this.setState({
+      startDate: picker.startDate,
+      endDate: picker.endDate,
+      currentRange: picker.chosenLabel
+    });
+  }
 
-	render() {
+  render() {
 
-		const label = this.state.currentRange;
+    const label = this.state.currentRange;
 
-		return (
-      <DateRangePicker startDate={this.state.startDate} endDate={this.state.endDate} ranges={this.state.ranges} onApply={this.handleEvent}>
-        <button className="btn selected-date-range-btn duration-btn" style={{width:'100%', align: 'center'}}>
+    return (
+      <DateRangePicker startDate={this.state.startDate} endDate={this.state.endDate} ranges={this.state.ranges}
+                       onApply={this.handleEvent}>
+        <button className="btn selected-date-range-btn duration-btn" style={{width: '100%', align: 'center'}}>
           <div className="pull-left">
             <div className="glyphicon glyphicon-calendar"></div>
           </div>
@@ -57,8 +58,8 @@ class DurationPicker extends React.Component {
         </button>
       </DateRangePicker>
 
-		);
-	}
+    );
+  }
 }
 
 export default DurationPicker

@@ -16,24 +16,20 @@ class CodeSelectionPanel extends React.Component {
 
     this.selectedCodeArray = [];
 
-    this.state = {initialCodeArray: []}
+    this.state = {initialCodeArray: []};
   }
 
   componentDidUpdate(nextProps, nextState) {
-
     if (this.state != nextState) {
-
       this.selectedCodeArray = this.state.initialCodeArray.slice();
-      //Send new data to parent for initialization
+      // Send new data to parent for initialization
       this.props.handler(this.selectedCodeArray);
-
     }
   }
 
   componentWillMount() {
-
     const _this = this;
-    axios.get("http://localhost:8983/solr/appData/select?facet.field=Code&facet.query=*&facet=on&indent=on&q=*:*&rows=0&wt=json")
+    axios.get('http://localhost:8983/solr/statsDashboard/select?facet.field=Code&facet.query=*&facet=on&indent=on&q=*:*&rows=0&wt=json')
       .then(function (d) {
         const theArray = d.data.facet_counts.facet_fields.Code;
         for (var i = 1; i <= theArray.length; i += 1)
@@ -54,7 +50,6 @@ class CodeSelectionPanel extends React.Component {
   }
 
   handleSelectAll(evt) {
-
     evt.preventDefault();
     this.selectedCodeArray = this.state.initialCodeArray.slice();
 
@@ -63,7 +58,6 @@ class CodeSelectionPanel extends React.Component {
   }
 
   handleSelectNone(evt) {
-
     evt.preventDefault();
     this.selectedCodeArray = [];
 
@@ -72,21 +66,18 @@ class CodeSelectionPanel extends React.Component {
 
 
   handleCodeCheck(e) {
-
     if (e.target.checked) {
-      this.selectedCodeArray.push(e.target.id)
+      this.selectedCodeArray.push(e.target.id);
     } else {
       this.selectedCodeArray.splice(this.selectedCodeArray.indexOf(e.target.id), 1);
     }
 
-    //Send new data to parent
+    // Send new data to parent
     this.props.handler(this.selectedCodeArray);
-
   }
 
 
   render() {
-
     const handler = this.handleCodeCheck;
     const isBoxChecked = this.isBoxChecked;
 
@@ -102,14 +93,14 @@ class CodeSelectionPanel extends React.Component {
             {this.state.initialCodeArray.map(function (code) {
               return (
                 <CheckboxItem handler={handler} value={code} key={code} checked={isBoxChecked(code)}/>
-              )
+              );
             })}
 
           </div>
         </form>
       </div>
-    )
+    );
   }
 }
 
-export default CodeSelectionPanel
+export default CodeSelectionPanel;

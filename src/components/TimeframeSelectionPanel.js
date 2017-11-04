@@ -19,7 +19,8 @@ class TimeframeSelectionPanel extends React.Component {
               <div className="panel-heading-darkgray" id="heading5">
                 <h4 className="panel-title">
                   <a className="glyphicon glyphicon-calendar pad14" href="#collapseFive"></a>
-                  <a className="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion5" href="#collapseFive">Duration</a>
+                  <a className="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion5"
+                     href="#collapseFive">Duration</a>
                 </h4>
               </div>
               <div id="collapseFive" className="panel-collapse collapse">
@@ -37,7 +38,8 @@ class TimeframeSelectionPanel extends React.Component {
               </div>
               <div id="collapseSix" className="panel-collapse collapse in">
                 <div className="panel-body">
-                  <DateTimePicker handler={this.props.handler} startTime={this.props.startTime} endTime={this.props.endTime}/>
+                  <DateTimePicker handler={this.props.handler} startTime={this.props.startTime}
+                                  endTime={this.props.endTime}/>
                 </div>
               </div>
             </div>

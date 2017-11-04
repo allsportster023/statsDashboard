@@ -1,39 +1,39 @@
 import React from 'react';
-import { Link } from 'react-router';
+import {Link} from 'react-router';
 
 const Table = React.createClass({
   //setting up initial state
-  getInitialState:function(){
-    return{
-      data:[]
+  getInitialState: function () {
+    return {
+      data: []
     };
   },
-  componentDidMount(){
+  componentDidMount() {
     this.getDataFromServer('http://localhost:9200/murmuration_objective/_search');
   },
   //showResult Method
-  showResult: function(response) {
+  showResult: function (response) {
     //console.log(response.hits.hits);
     this.setState({
       data: response.hits.hits
     });
   },
   //making ajax call to get data from server
-  getDataFromServer:function(URL){
+  getDataFromServer: function (URL) {
     $.ajax({
-      type:"GET",
-      dataType:"json",
-      url:URL,
-      success: function(response) {
+      type: "GET",
+      dataType: "json",
+      url: URL,
+      success: function (response) {
         this.showResult(response);
       }.bind(this),
-      error: function(xhr, status, err) {
+      error: function (xhr, status, err) {
         console.error(this.props.url, status, err.toString());
       }.bind(this)
     });
   },
-  render:function(){
-    return(
+  render: function () {
+    return (
       <div>
         <Result result={this.state.data}/>
       </div>
@@ -42,12 +42,12 @@ const Table = React.createClass({
 });
 
 const Result = React.createClass({
-  render:function(){
+  render: function () {
     console.log(this.props.result);
-    var result = this.props.result.map(function(result,index){
-      return <ResultItem key={index} objective={ result } />
+    var result = this.props.result.map(function (result, index) {
+      return <ResultItem key={index} objective={result}/>
     });
-    return(
+    return (
       <div className="row">
         <div className="col-md-12">
           <table className="table table-bordered">
@@ -73,9 +73,9 @@ const Result = React.createClass({
 });
 
 var ResultItem = React.createClass({
-  render:function(){
+  render: function () {
     var objective = this.props.objective;
-    return(
+    return (
       <tr>
         <td><Link to={"/objective/" + objective._id}>{objective._source.name}</Link></td>
         <td>{objective._source.description}</td>

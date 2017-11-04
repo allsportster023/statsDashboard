@@ -8,7 +8,8 @@ class AxisXInput extends React.Component {
 
   render() {
     return (
-      <select className="selectpicker drop-select" data-style="dropdown" value={this.props.xValue} onChange={this.props.handler}>
+      <select className="selectpicker drop-select" data-style="dropdown" value={this.props.xValue}
+              onChange={this.props.handler}>
         <option value="Date">Date</option>
         <option value="Source">Source</option>
         <option value="Code">Code</option>

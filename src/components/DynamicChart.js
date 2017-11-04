@@ -18,13 +18,10 @@ const flatten = function (input) {
   return flattened;
 };
 
-const unique = function(arr)
-{
-  var n = {},r=[];
-  for(var i = 0; i < arr.length; i++)
-  {
-    if (!n[arr[i]])
-    {
+const unique = function (arr) {
+  var n = {}, r = [];
+  for (var i = 0; i < arr.length; i++) {
+    if (!n[arr[i]]) {
       n[arr[i]] = true;
       r.push(arr[i]);
     }
@@ -62,7 +59,7 @@ class DynamicChart extends React.Component {
     }
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.getDataFromSolr();
   }
 
@@ -83,8 +80,8 @@ class DynamicChart extends React.Component {
 
   }
 
-  createSolrQueryString(){
-    let solrQueryStr = "http://localhost:8983/solr/appData/select?wt=json&indent=true&rows=0&q=";
+  createSolrQueryString() {
+    let solrQueryStr = "http://localhost:8983/solr/statsDashboard/select?wt=json&indent=true&rows=0&q=";
 
     solrQueryStr += "Source:";
     solrQueryStr += this.convertArrayToSolrSyntax(this.props.sources);
@@ -92,15 +89,15 @@ class DynamicChart extends React.Component {
     solrQueryStr += this.convertArrayToSolrSyntax(this.props.categories);
     solrQueryStr += " AND Code:";
     solrQueryStr += this.convertArrayToSolrSyntax(this.props.codes);
-    solrQueryStr += " AND Date:["+new Date(this.props.timeframe[0]).toISOString()+" TO "+new Date(this.props.timeframe[1]).toISOString()+"]";
+    solrQueryStr += " AND Date:[" + new Date(this.props.timeframe[0]).toISOString() + " TO " + new Date(this.props.timeframe[1]).toISOString() + "]";
 
     return solrQueryStr;
 
   }
 
-  createPivotCall(urlStr){
+  createPivotCall(urlStr) {
 
-    if(this.state.showGaps){
+    if (this.state.showGaps) {
       urlStr += "&facet.pivot.mincount=0"
     }
 
@@ -120,7 +117,7 @@ class DynamicChart extends React.Component {
 
         const newData = d.data.facet_counts.facet_pivot[Object.keys(d.data.facet_counts.facet_pivot)[0]];
 
-        if(_this.state.chartType == 'bar') {
+        if (_this.state.chartType == 'bar') {
           _this.setState({
             data: _this.convertSolrDataToBarData(newData),
           })
@@ -137,7 +134,7 @@ class DynamicChart extends React.Component {
 
   componentDidUpdate(nextProps, nextState) {
 
-    if(this.props != nextProps) {
+    if (this.props != nextProps) {
       if (this.props.sources.length != 0 &&
         this.props.timeframe.length != 0 &&
         this.props.categories.length != 0 &&
@@ -152,11 +149,11 @@ class DynamicChart extends React.Component {
       }
     }
 
-    if(this.state != nextState){
+    if (this.state != nextState) {
       console.log("DynamicChart: componentDidUpdate State");
 
-      if(this.state.xAxisValue != nextState.xAxisValue ||
-         this.state.yAxisValue != nextState.yAxisValue) {
+      if (this.state.xAxisValue != nextState.xAxisValue ||
+        this.state.yAxisValue != nextState.yAxisValue) {
         console.log("DynamicChart: componentDidUpdate State: axisValue");
 
         this.getDataFromSolr();
@@ -173,7 +170,7 @@ class DynamicChart extends React.Component {
     }
   }
 
-  convertSolrDataToSeries(data){
+  convertSolrDataToSeries(data) {
 
     const tmpChartSeries = data.map(function (d) {
       return d.pivot.map(function (e) {
@@ -187,7 +184,7 @@ class DynamicChart extends React.Component {
 
   }
 
-  convertSolrDataToBarData(data){
+  convertSolrDataToBarData(data) {
 
     let barChartDataArray = [];
     const _this = this;
@@ -195,16 +192,16 @@ class DynamicChart extends React.Component {
     // const xValues = data.map(function (d) {
     data.forEach(function (d) {
 
-      let barChartDataObj= {};
+      let barChartDataObj = {};
 
       //Set the value field to be the XAxis field
 
-      if(isNaN(new Date(d.value).valueOf())){
+      if (isNaN(new Date(d.value).valueOf())) {
         barChartDataObj[_this.state.xAxisValue] = d.value;
       } else {
         let m = new Date(d.value);
         barChartDataObj[_this.state.xAxisValue] = m.getUTCFullYear() + "-" +
-          ("0" + (m.getUTCMonth()+1)).slice(-2) + "-" +
+          ("0" + (m.getUTCMonth() + 1)).slice(-2) + "-" +
           ("0" + m.getUTCDate()).slice(-2);
 
       }
@@ -226,7 +223,7 @@ class DynamicChart extends React.Component {
 
   }
 
-  convertSolrDataToPieData(data){
+  convertSolrDataToPieData(data) {
 
     console.log(data);
 
@@ -287,16 +284,16 @@ class DynamicChart extends React.Component {
   }
 
 
-
   render() {
 
     let chart = null;
 
     if (this.state.chartType == 'bar' && this.state.data.length != 0) {
 
-      chart = <StackedChart width={475} height={280} data={this.state.data} xField={this.state.xAxisValue} colorMap={this.props.colorMap}/>;
+      chart = <StackedChart width={475} height={280} data={this.state.data} xField={this.state.xAxisValue}
+                            colorMap={this.props.colorMap}/>;
 
-    } else if(this.state.chartType == 'pie' && this.state.data.length != 0) {
+    } else if (this.state.chartType == 'pie' && this.state.data.length != 0) {
 
       chart = <MultiLevelPieChart width={475} height={280} data={this.state.data} colorMap={this.props.colorMap}/>
 
@@ -307,7 +304,7 @@ class DynamicChart extends React.Component {
       <div className="container-fluid chart-title">
         <div className="row">
           <div className="col-md-12 chart-header">
-            {this.state.xAxisValue+" by "+this.state.yAxisValue}
+            {this.state.xAxisValue + " by " + this.state.yAxisValue}
           </div>
           <div className="col-md-3 drop-title">
             {this.state.chartType == 'bar' ? "Series" : "Outer"}
@@ -333,8 +330,9 @@ class DynamicChart extends React.Component {
             {/*{this.state.xAxisValue.charAt(0).toUpperCase() + this.state.xAxisValue.slice(1)}*/}
           </div>
           <div className="col-md-3 drop-title">
-            {this.state.chartType == 'bar' ? "Show Gaps" : null }
-            {this.state.chartType == 'bar' ? <ShowGapInput handler={this.handleGapChange} showGaps={this.state.showGaps}/> : null}
+            {this.state.chartType == 'bar' ? "Show Gaps" : null}
+            {this.state.chartType == 'bar' ?
+              <ShowGapInput handler={this.handleGapChange} showGaps={this.state.showGaps}/> : null}
           </div>
         </div>
       </div>

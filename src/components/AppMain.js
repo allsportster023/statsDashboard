@@ -7,7 +7,7 @@ import TableOrGraphPanel from './TableOrGraphPanel';
 let colorMap = {};
 
 
-let alreadyCreatedColors= false;
+let alreadyCreatedColors = false;
 
 class AppMain extends React.Component {
 
@@ -43,28 +43,28 @@ class AppMain extends React.Component {
 
       let goldenRatio = 0.618033988749895;
 
-      if(!alreadyCreatedColors) {
+      if (!alreadyCreatedColors) {
 
 
-        this.state.sources.forEach(function (d,i) {
+        this.state.sources.forEach(function (d, i) {
           var startVal = 10.1;
-          startVal += goldenRatio*i;
+          startVal += goldenRatio * i;
           startVal %= 1;
-          colorMap[d] = "hsl("+(360*startVal)+", 90%, 50%)";
+          colorMap[d] = "hsl(" + (360 * startVal) + ", 90%, 50%)";
         });
 
-        this.state.categories.forEach(function (d,i) {
+        this.state.categories.forEach(function (d, i) {
           let startVal = 100.1;
-          startVal += goldenRatio*i;
+          startVal += goldenRatio * i;
           startVal %= 1;
-          colorMap[d] = "hsl("+(360*startVal)+", 60%, 55%)";
+          colorMap[d] = "hsl(" + (360 * startVal) + ", 60%, 55%)";
         });
 
-        this.state.codes.forEach(function (d,i) {
+        this.state.codes.forEach(function (d, i) {
           let startVal = 1000.1;
-          startVal += goldenRatio*i;
+          startVal += goldenRatio * i;
           startVal %= 1;
-          colorMap[d] = "hsl("+(360*startVal)+", 40%, 60%)";
+          colorMap[d] = "hsl(" + (360 * startVal) + ", 40%, 60%)";
 
         });
 
@@ -75,21 +75,21 @@ class AppMain extends React.Component {
       var firstDate = new Date(this.state.timeframe[0]);
       var secondDate = new Date(this.state.timeframe[1]);
 
-      var diffDays = Math.round(Math.abs((firstDate.getTime() - secondDate.getTime())/(86400000)));
+      var diffDays = Math.round(Math.abs((firstDate.getTime() - secondDate.getTime()) / (86400000)));
 
       //For each day, figure out the correct color
-      for(var i = 0; i <= diffDays; i++){
+      for (var i = 0; i <= diffDays; i++) {
         let thisDate = new Date(firstDate.valueOf());
         thisDate.setDate(firstDate.getDate() + i);
 
         let milliDate = Date.parse(thisDate.getUTCFullYear() + "-" +
-          ("0" + (thisDate.getUTCMonth()+1)).slice(-2) + "-" +
+          ("0" + (thisDate.getUTCMonth() + 1)).slice(-2) + "-" +
           ("0" + thisDate.getUTCDate()).slice(-2));
 
         let startVal = 500.1;
-        startVal += goldenRatio*parseInt(milliDate.toString().slice(0,6));
+        startVal += goldenRatio * parseInt(milliDate.toString().slice(0, 6));
         startVal %= 1;
-        colorMap[new Date(milliDate).toISOString().slice(0,19)+"Z"] = "hsl(187, "+(100*startVal)+"%, "+(100*startVal)+"%)";
+        colorMap[new Date(milliDate).toISOString().slice(0, 19) + "Z"] = "hsl(187, " + (100 * startVal) + "%, " + (100 * startVal) + "%)";
 
       }
 
@@ -174,13 +174,14 @@ class AppMain extends React.Component {
             <div className="container-fluid">
               <div className="row">
                 <div className="map">
-                  <Map size={{width: '100%', height: '50vh'}} sources={this.state.sources} timeframe={this.state.timeframe}
+                  <Map size={{width: '100%', height: '50vh'}} sources={this.state.sources}
+                       timeframe={this.state.timeframe}
                        categories={this.state.categories} codes={this.state.codes} colorMap={colorMap}/>
                 </div>
               </div>
               <div className="row table2">
                 <TableOrGraphPanel sources={this.state.sources} timeframe={this.state.timeframe}
-                            categories={this.state.categories} codes={this.state.codes} colorMap={colorMap}/>
+                                   categories={this.state.categories} codes={this.state.codes} colorMap={colorMap}/>
               </div>
             </div>
           </div>

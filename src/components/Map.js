@@ -4,7 +4,7 @@ import L from 'leaflet';
 import MapLegend from './MapLegend';
 import axios from 'axios';
 
-export class Map extends  React.Component{
+export class Map extends React.Component {
 
   constructor(props) {
     super(props);
@@ -18,7 +18,7 @@ export class Map extends  React.Component{
   }
 
   componentDidUpdate(nextProps, nextState) {
-    if(this.props != nextProps) {
+    if (this.props != nextProps) {
       if (this.props.sources.length != 0 &&
         this.props.timeframe.length != 0 &&
         this.props.categories.length != 0 &&
@@ -27,7 +27,7 @@ export class Map extends  React.Component{
 
         let map = this.map;
         this.map.eachLayer(function (layer) {
-          if(layer instanceof L.FeatureGroup) {
+          if (layer instanceof L.FeatureGroup) {
             map.removeLayer(layer);
           }
         });
@@ -39,11 +39,11 @@ export class Map extends  React.Component{
     }
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.loadMap();
   }
 
-  componentWillUnmount(){
+  componentWillUnmount() {
     this.map.eachLayer(function (layer) {
       map.removeLayer(layer);
     });
@@ -54,17 +54,17 @@ export class Map extends  React.Component{
     const node = ReactDOM.findDOMNode(mapRef);
 
     this.map = L.map(node, {
-        center: [0,0],
-        zoom: 2,
-        minZoom: 2,
-        maxZoom: 20,
-        zoomControl: true,
-        layers: [
-          L.tileLayer(
-            'http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png')
-        ],
-        attributionControl: false
-      });
+      center: [0, 0],
+      zoom: 2,
+      minZoom: 2,
+      maxZoom: 20,
+      zoomControl: true,
+      layers: [
+        L.tileLayer(
+          'http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png')
+      ],
+      attributionControl: false
+    });
 
   }
 
@@ -85,24 +85,25 @@ export class Map extends  React.Component{
       }
     });
 
-    // axios.get("http://localhost:8983/solr/appData/select?wt=json&indent=true&q=*:*&rows=50")
+    // axios.get("http://localhost:8983/solr/statsDashboard/select?wt=json&indent=true&q=*:*&rows=50")
     axios.get(this.createSolrQueryString())
       .then(function (d) {
         console.log("Loaded Map Data");
 
-        d.data.response.docs.forEach(function(obj){
+        d.data.response.docs.forEach(function (obj) {
           // let ptMarker = L.circleMarker(L.latLng(obj.Location[0].split(/.*\((.*),\s(.*)\)/)[2], obj.Location[0].split(/.*\((.*),\s(.*)\)/)[1]), {color: colorMap[obj.Source[0]]});
 
           let objMarker = new customCircleMarker(L.latLng(obj.Location[0].split(/.*\((.*),\s(.*)\)/)[2], obj.Location[0].split(/.*\((.*),\s(.*)\)/)[1]),
-            { metadata: obj,
+            {
+              metadata: obj,
               color: colorMap[obj.Source[0]]
             }
           );
 
           let tooltipText = "<b>Source:</b> " + obj.Source[0] + "<br/>" +
-                            "<b>Date:</b> " + obj.Date[0] + "<br/>" +
-                            "<b>Category:</b> " + obj.Category[0] + "<br/>" +
-                            "<b>Code:</b> " + obj.Code[0] + "<br/>";
+            "<b>Date:</b> " + obj.Date[0] + "<br/>" +
+            "<b>Category:</b> " + obj.Category[0] + "<br/>" +
+            "<b>Code:</b> " + obj.Code[0] + "<br/>";
 
           objMarker.bindTooltip(tooltipText).openTooltip();
 
@@ -112,8 +113,8 @@ export class Map extends  React.Component{
       });
   }
 
-  createSolrQueryString(){
-    let solrQueryStr = "http://localhost:8983/solr/appData/select?wt=json&indent=true&rows=50&q=";
+  createSolrQueryString() {
+    let solrQueryStr = "http://localhost:8983/solr/statsDashboard/select?wt=json&indent=true&rows=50&q=";
 
     solrQueryStr += "Source:";
     solrQueryStr += this.convertArrayToSolrSyntax(this.props.sources);
@@ -121,7 +122,7 @@ export class Map extends  React.Component{
     solrQueryStr += this.convertArrayToSolrSyntax(this.props.categories);
     solrQueryStr += " AND Code:";
     solrQueryStr += this.convertArrayToSolrSyntax(this.props.codes);
-    solrQueryStr += " AND Date:["+new Date(this.props.timeframe[0]).toISOString()+" TO "+new Date(this.props.timeframe[1]).toISOString()+"]";
+    solrQueryStr += " AND Date:[" + new Date(this.props.timeframe[0]).toISOString() + " TO " + new Date(this.props.timeframe[1]).toISOString() + "]";
 
     console.log(solrQueryStr);
 
@@ -147,13 +148,13 @@ export class Map extends  React.Component{
   }
 
 
-  render(){
+  render() {
     return (
       <div>
         <div ref="map" style={this.props.size}>Loading Map...</div>
         <MapLegend sources={this.props.sources} colorMap={this.props.colorMap}/>
       </div>
-  )
+    )
   }
 }
 

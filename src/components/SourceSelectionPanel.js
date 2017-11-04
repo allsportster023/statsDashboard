@@ -21,20 +21,16 @@ class SourceSelectionPanel extends React.Component {
   }
 
   componentDidUpdate(nextProps, nextState) {
-
     if (this.state != nextState) {
-
       this.selectedSourceArray = this.state.initialSourceArray.slice();
-      //Send new data to parent on initialization
+      // Send new data to parent on initialization
       this.props.handler(this.selectedSourceArray);
-
     }
   }
 
   componentWillMount() {
-
     const _this = this;
-    axios.get("http://localhost:8983/solr/appData/select?facet.field=Source&facet.query=*&facet=on&indent=on&q=*:*&rows=0&wt=json")
+    axios.get('http://localhost:8983/solr/statsDashboard/select?facet.field=Source&facet.query=*&facet=on&indent=on&q=*:*&rows=0&wt=json')
       .then(function (d) {
         const theArray = d.data.facet_counts.facet_fields.Source;
         for (var i = 1; i <= theArray.length; i += 1)
@@ -55,7 +51,6 @@ class SourceSelectionPanel extends React.Component {
   }
 
   handleSelectAll(evt) {
-
     evt.preventDefault();
     this.selectedSourceArray = this.state.initialSourceArray.slice();
 
@@ -64,7 +59,6 @@ class SourceSelectionPanel extends React.Component {
   }
 
   handleSelectNone(evt) {
-
     evt.preventDefault();
     this.selectedSourceArray = [];
 
@@ -72,20 +66,17 @@ class SourceSelectionPanel extends React.Component {
   }
 
   handleSourceCheck(e) {
-
     if (e.target.checked) {
-      this.selectedSourceArray.push(e.target.id)
+      this.selectedSourceArray.push(e.target.id);
     } else {
       this.selectedSourceArray.splice(this.selectedSourceArray.indexOf(e.target.id), 1);
     }
 
-    //Send new data to parent
+    // Send new data to parent
     this.props.handler(this.selectedSourceArray);
-
   }
 
   render() {
-
     const handler = this.handleSourceCheck;
     const isBoxChecked = this.isBoxChecked;
 
@@ -99,18 +90,17 @@ class SourceSelectionPanel extends React.Component {
           <div className="form-group">
 
             {this.state.initialSourceArray.map(function (source) {
-
               return (
                 <CheckboxItem handler={handler} value={source} key={source} checked={isBoxChecked(source)}/>
-              )
+              );
             })}
 
           </div>
         </form>
       </div>
-    )
+    );
   }
 }
 
 
-export default SourceSelectionPanel
+export default SourceSelectionPanel;
