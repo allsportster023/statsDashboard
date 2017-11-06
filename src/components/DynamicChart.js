@@ -9,18 +9,18 @@ import ShowGapInput from './ShowGapInput';
 import MultiLevelPieChart from './MultiLevelPieChart';
 
 const flatten = function (input) {
-  var flattened = [];
+  let flattened = [];
 
-  for (var i = 0; i < input.length; ++i) {
-    for (var j = 0; j < input[i].length; ++j)
+  for (let i = 0; i < input.length; ++i) {
+    for (let j = 0; j < input[i].length; ++j)
       flattened.push(input[i][j]);
   }
   return flattened;
 };
 
 const unique = function (arr) {
-  var n = {}, r = [];
-  for (var i = 0; i < arr.length; i++) {
+  let n = {}, r = [];
+  for (let i = 0; i < arr.length; i++) {
     if (!n[arr[i]]) {
       n[arr[i]] = true;
       r.push(arr[i]);
@@ -108,6 +108,14 @@ class DynamicChart extends React.Component {
   }
 
   getDataFromSolr() {
+
+    //If there data is not loaded yet, ignore running the URL call
+    if(this.props.sources.length === 0 &&
+       this.props.categories.length === 0 &&
+       this.props.codes.length === 0) {
+      return;
+    }
+
     const _this = this;
     const startUrl = this.createSolrQueryString();
     const pivotUrl = this.createPivotCall(startUrl);
@@ -117,28 +125,32 @@ class DynamicChart extends React.Component {
 
         const newData = d.data.facet_counts.facet_pivot[Object.keys(d.data.facet_counts.facet_pivot)[0]];
 
-        if (_this.state.chartType == 'bar') {
+        if (_this.state.chartType === 'bar') {
           _this.setState({
             data: _this.convertSolrDataToBarData(newData),
           })
 
-        } else if (_this.state.chartType == 'pie') {
+        } else if (_this.state.chartType === 'pie') {
+
           _this.setState({
             data: _this.convertSolrDataToPieData(newData),
           })
 
         }
-      });
+      }).catch(error => {
+      console.log("BEN: some type of error")
+    });
 
   }
 
   componentDidUpdate(nextProps, nextState) {
 
-    if (this.props != nextProps) {
-      if (this.props.sources.length != 0 &&
-        this.props.timeframe.length != 0 &&
-        this.props.categories.length != 0 &&
-        this.props.codes.length != 0) {
+    if (this.props !== nextProps) {
+      console.log("Props are different");
+      if (this.props.sources.length !== 0 &&
+        this.props.timeframe.length !== 0 &&
+        this.props.categories.length !== 0 &&
+        this.props.codes.length !== 0) {
 
         console.log("DynamicChart: componentDidUpdate Props");
 
@@ -149,24 +161,23 @@ class DynamicChart extends React.Component {
       }
     }
 
-    if (this.state != nextState) {
+    if (this.state !== nextState) {
       console.log("DynamicChart: componentDidUpdate State");
 
-      if (this.state.xAxisValue != nextState.xAxisValue ||
-        this.state.yAxisValue != nextState.yAxisValue) {
+      if (this.state.xAxisValue !== nextState.xAxisValue ||
+        this.state.yAxisValue !== nextState.yAxisValue) {
         console.log("DynamicChart: componentDidUpdate State: axisValue");
 
         this.getDataFromSolr();
-      } else if (this.state.chartType != nextState.chartType) {
+      } else if (this.state.chartType !== nextState.chartType) {
         console.log("DynamicChart: componentDidUpdate State: chartType");
 
         this.getDataFromSolr();
-      } else if (this.state.showGaps != nextState.showGaps) {
+      } else if (this.state.showGaps !== nextState.showGaps) {
         console.log("DynamicChart: componentDidUpdate State: chartType");
 
         this.getDataFromSolr();
       }
-
     }
   }
 
@@ -269,7 +280,7 @@ class DynamicChart extends React.Component {
     console.log(typeof e.target.value);
 
     this.setState({
-      showGaps: (e.target.value == 'true')
+      showGaps: (e.target.value === 'true')
     });
 
   }
@@ -288,12 +299,12 @@ class DynamicChart extends React.Component {
 
     let chart = null;
 
-    if (this.state.chartType == 'bar' && this.state.data.length != 0) {
+    if (this.state.chartType === 'bar' && this.state.data.length !== 0) {
 
       chart = <StackedChart width={475} height={280} data={this.state.data} xField={this.state.xAxisValue}
                             colorMap={this.props.colorMap}/>;
 
-    } else if (this.state.chartType == 'pie' && this.state.data.length != 0) {
+    } else if (this.state.chartType === 'pie' && this.state.data.length !== 0) {
 
       chart = <MultiLevelPieChart width={475} height={280} data={this.state.data} colorMap={this.props.colorMap}/>
 
@@ -307,10 +318,10 @@ class DynamicChart extends React.Component {
             {this.state.xAxisValue + " by " + this.state.yAxisValue}
           </div>
           <div className="col-md-3 drop-title">
-            {this.state.chartType == 'bar' ? "Series" : "Outer"}
+            {this.state.chartType === 'bar' ? "Series" : "Outer"}
             <AxisYInput handler={this.handleYaxisChange} xValue={this.state.yAxisValue}/>
           </div>
-          <div className="col-md-5"></div>
+          <div className="col-md-5"/>
           <div className="col-md-3 drop-title">
             Chart Type
             <ChartTypeInput handler={this.handleChartTypeChange} chartType={this.state.chartType}/>
@@ -323,15 +334,15 @@ class DynamicChart extends React.Component {
 
         <div className="row">
           <div className="col-md-3 drop-title">
-            {this.state.chartType == 'bar' ? "X Axis" : "Inner"}
+            {this.state.chartType === 'bar' ? "X Axis" : "Inner"}
             <AxisXInput handler={this.handleXaxisChange} xValue={this.state.xAxisValue}/>
           </div>
           <div className="col-md-5">
             {/*{this.state.xAxisValue.charAt(0).toUpperCase() + this.state.xAxisValue.slice(1)}*/}
           </div>
           <div className="col-md-3 drop-title">
-            {this.state.chartType == 'bar' ? "Show Gaps" : null}
-            {this.state.chartType == 'bar' ?
+            {this.state.chartType === 'bar' ? "Show Gaps" : null}
+            {this.state.chartType === 'bar' ?
               <ShowGapInput handler={this.handleGapChange} showGaps={this.state.showGaps}/> : null}
           </div>
         </div>
