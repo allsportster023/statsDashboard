@@ -31,10 +31,10 @@ class AppMain extends React.Component {
   componentDidUpdate(nextProps, nextState) {
     console.log("AppMain: Component Did Update");
 
-    if (this.state.sources.length != 0 &&
-      this.state.timeframe.length != 0 &&
-      this.state.categories.length != 0 &&
-      this.state.codes.length != 0) {
+    if (this.state.sources.length !== 0 &&
+      this.state.timeframe.length !== 0 &&
+      this.state.categories.length !== 0 &&
+      this.state.codes.length !== 0) {
 
       console.log(this.state.sources);
       console.log(this.state.timeframe);
@@ -47,7 +47,7 @@ class AppMain extends React.Component {
 
 
         this.state.sources.forEach(function (d, i) {
-          var startVal = 10.1;
+          let startVal = 10.1;
           startVal += goldenRatio * i;
           startVal %= 1;
           colorMap[d] = "hsl(" + (360 * startVal) + ", 90%, 50%)";
@@ -72,13 +72,13 @@ class AppMain extends React.Component {
 
       }
 
-      var firstDate = new Date(this.state.timeframe[0]);
-      var secondDate = new Date(this.state.timeframe[1]);
+      let firstDate = new Date(this.state.timeframe[0]);
+      let secondDate = new Date(this.state.timeframe[1]);
 
-      var diffDays = Math.round(Math.abs((firstDate.getTime() - secondDate.getTime()) / (86400000)));
+      let diffDays = Math.round(Math.abs((firstDate.getTime() - secondDate.getTime()) / (86400000)));
 
       //For each day, figure out the correct color
-      for (var i = 0; i <= diffDays; i++) {
+      for (let i = 0; i <= diffDays; i++) {
         let thisDate = new Date(firstDate.valueOf());
         thisDate.setDate(firstDate.getDate() + i);
 

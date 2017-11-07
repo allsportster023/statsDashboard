@@ -18,11 +18,11 @@ export class Map extends React.Component {
   }
 
   componentDidUpdate(nextProps, nextState) {
-    if (this.props != nextProps) {
-      if (this.props.sources.length != 0 &&
-        this.props.timeframe.length != 0 &&
-        this.props.categories.length != 0 &&
-        this.props.codes.length != 0 &&
+    if (this.props !== nextProps) {
+      if (this.props.sources.length !== 0 &&
+        this.props.timeframe.length !== 0 &&
+        this.props.categories.length !== 0 &&
+        this.props.codes.length !== 0 &&
         this.props.colorMap) {
 
         let map = this.map;

@@ -14,9 +14,9 @@ class MapLegend extends React.Component {
   componentDidUpdate(nextProps, nextState) {
 
     //Only update the sources one time when we have all of them
-    if (this.props != nextProps && !this.alreadyUpdated) {
+    if (this.props !== nextProps && !this.alreadyUpdated) {
 
-      if (this.props.sources.length != 0 && this.props.colorMap) {
+      if (this.props.sources.length !== 0 && this.props.colorMap) {
         this.sources = this.props.sources.slice();
         this.colorMap = this.props.colorMap;
 

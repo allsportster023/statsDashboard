@@ -16,11 +16,11 @@ class TablePanel extends React.Component {
   }
 
   componentDidUpdate(nextProps, nextState) {
-    if (this.props != nextProps) {
-      if (this.props.sources.length != 0 &&
-        this.props.timeframe.length != 0 &&
-        this.props.categories.length != 0 &&
-        this.props.codes.length != 0 &&
+    if (this.props !== nextProps) {
+      if (this.props.sources.length !== 0 &&
+        this.props.timeframe.length !== 0 &&
+        this.props.categories.length !== 0 &&
+        this.props.codes.length !== 0 &&
         this.props.colorMap) {
         this.getDataFromSolr();
       }
@@ -73,7 +73,7 @@ class TablePanel extends React.Component {
         <div className="panel" style={{maxHeight: '30vh', overflowY: 'scroll'}}>
           <table className="table table-hover table-bordered table-condensed">
             <thead>
-            <tr tableHead>
+            <tr className={"tableHead"}>
               <th>Date</th>
               <th>Source</th>
               <th>Category</th>
